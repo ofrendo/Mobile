@@ -46,7 +46,7 @@ ssh -T git@github.com
 ```
 
 ## Repo lokal hinzufügen
-CMD öffnen. Danach in den Ordner wechseln, in das man arbeiten möchte (es wird noch ein neuer Unterordner von Git erzeugt):
+CMD öffnen. Danach in den Ordner wechseln, in das man arbeiten möchte. Es wird dabei ein neuer Unterordner von Git erzeugt):
 ```
 cd "DeinOrdner"
 git clone "git@github.com:ofrendo/Mobile.git"
@@ -61,12 +61,12 @@ git status
 ```
 
 Commit ist etwas gewöhnungsbedürftig. Es muss eine Nachricht angegeben werden (möglichst sinnvoll), dabei wird "VIM" verwendet.
-Nach dem nachfolgenden Befehl kann diese eingegeben werden. Danach mit ESCAPE-wq-ENTER den Prozess beenden.
+Nach dem nachfolgenden Befehl kann diese eingegeben werden. Danach mit ESCAPE-DOPPELPUNKT-wq-ENTER den Prozess beenden.
 ```
 git commit -a
 ```
 
-Push: Davor einmal lokal überprüfen, ob irgendwas auf dem Server verändert wurde.
+Push: Davor einmal lokal überprüfen, ob irgendwas auf dem Server verändert wurde (bei beiden Befehlen wird das Passwort vom SSH Key benötigt).
 ```
 git pull
 git push
