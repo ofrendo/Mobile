@@ -19,23 +19,26 @@ git config --global user.email="GithubEmailadresse"
 ## SSH Key erzeugen
 ```
 Git Bash öffnen (Rechtsklick im Windows Explorer und dann "Git Bash" wählen).
-
+```
+```
 ssh-keygen -t rsa -C "GithubEmailadresse"
 Filename wählen, z.B. "work_laptop"
 Passwort wählen
-
+```
+```
 eval $(ssh-agent)
-
+```
+```
 ssh-add ~/.ssh/work_laptop (Filename anpassen!)
 ```
 
-Danach muss Git noch gesagt werden, dass dieser Key wirklich benutzt werden soll. Dazu eine Datei "config" (ohne Endung) in Benutzername/.ssh erstellen mit folgendem Inhalt. Dabei auf das Leerzeichen auf der zweiten Zeile achten und den Filenamen anpassen:
+Danach muss Git noch gesagt werden, dass dieser Key wirklich benutzt werden soll. Dazu eine Datei "config" (ohne Endung) in `Benutzername/.ssh` erstellen mit folgendem Inhalt. Dabei auf das Leerzeichen auf der zweiten Zeile achten und den Filenamen anpassen:
 ```
 Host github.com
  IdentityFile ~/.ssh/work_laptop
 ```
 
-Bei Problem ist [hier](https://help.github.com/articles/generating-ssh-keys/) die Guide.
+Bei Problemen ist [hier](https://help.github.com/articles/generating-ssh-keys/) die Guide.
 
 ## SSH Key zu GitHub Account hinzufügen
 [Siehe Schritt 3](ttps://help.github.com/articles/generating-ssh-keys/)
