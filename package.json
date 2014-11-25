@@ -1,0 +1,23 @@
+{
+  "name": "Mobile",
+  "version": "0.1.0",
+  "description": "Mobile node.js backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ofrendo/Mobile"
+  },
+  "keywords": [
+    "node",
+    "heroku"
+  ],
+  "license": "MIT"
+}
