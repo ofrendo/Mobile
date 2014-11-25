@@ -57,17 +57,16 @@ git clone "git@github.com:ofrendo/Mobile.git"
 ```
 
 ## Etwas pushen
-Wichtig: Davor in den Ordner wechseln, in der das Projekt liegt.
+Wichtig: Davor in CMD in den Ordner wechseln, in der das Projekt liegt.
 
 Status überprüfen:
 ```
 git status
 ```
 
-Commit ist etwas gewöhnungsbedürftig. Es muss eine Nachricht angegeben werden (möglichst sinnvoll), dabei wird "VIM" verwendet.
-Nach dem nachfolgenden Befehl kann diese eingegeben werden. Danach mit ESCAPE-DOPPELPUNKT-wq-ENTER den Prozess beenden.
+Commit:
 ```
-git commit -a
+git commit -m "Sinnvolle Nachricht für Commit"
 ```
 
 Push: Davor einmal lokal überprüfen, ob irgendwas auf dem Server verändert wurde (bei beiden Befehlen wird das Passwort vom SSH Key benötigt).
