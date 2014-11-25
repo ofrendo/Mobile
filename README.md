@@ -6,6 +6,11 @@ Mobile Projekt 5. Semester
 https://docs.google.com/document/d/1wqhUEl61v_4DUfruozFuAm6QYn54y0OggV536aWGpmk/edit#
 ```
 
+## Mobile backend (inklusive REST API)
+```
+https://github.com/ofrendo/Mobile-be
+```
+
 # Git Einrichtung
 
 Prüfen, ob Git installiert ist. Falls nicht ist [hier](http://git-scm.com/downloads) der Download, oder [hier](https://windows.github.com/) falls ihr das GUI wollt.
