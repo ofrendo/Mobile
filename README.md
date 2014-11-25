@@ -46,7 +46,7 @@ Host github.com
 Bei Problemen ist [hier](https://help.github.com/articles/generating-ssh-keys/) die Guide.
 
 ## SSH Key zu GitHub Account hinzufügen
-[Siehe Schritt 3](ttps://help.github.com/articles/generating-ssh-keys/)
+[Siehe Schritt 3](https://help.github.com/articles/generating-ssh-keys/)
 
 Zum Testen kann im Git Bash folgendes verwendet werden:
 ```
