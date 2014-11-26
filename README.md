@@ -4,6 +4,9 @@ Mobile Projekt 5. Semester
 ## Google Docs Sammlung von Ideen:
 https://docs.google.com/document/d/1wqhUEl61v_4DUfruozFuAm6QYn54y0OggV536aWGpmk/edit#
 
+## Frontend Github Repo
+https://github.com/ofrendo/Mobile-fe
+
 ## Mockups
 https://www.fluidui.com/editor/live/preview/p_zW5eZMINKgiua1atXO9TQJ4MfGmnfQoR.1416922721797
 
