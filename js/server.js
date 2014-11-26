@@ -1,8 +1,7 @@
-var db = require("/db");
 var express = require('express');
 var app = express();
 
-function start() {
+function start(db) {
 	db.connect();
 
 	app.get("/", function(req, res) {
