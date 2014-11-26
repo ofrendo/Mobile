@@ -11,7 +11,7 @@ db.connect = function(callback) {
 }
 
 db.createTestTable = function(callback) {
-	var sql = "CREATE TABLE test (num int SERIAL, name varchar(20))";
+	var sql = "CREATE TABLE test (num SERIAL, name varchar(20))";
 	var query = client.query(sql);
 
 	query.on("row", function(row) {
