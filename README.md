@@ -1,6 +1,22 @@
 Mobile Projekt 5. Semester
 ======
 
+## Backend Infos
+Nur notwendig falls lokal laufen soll.
+
+# Vor erstem Laufen
+Module installieren:
+```
+npm install express --g (Express framework)
+npm install pg --g (Postgress module)
+```
+
+# Lokal laufen lassen
+```
+cd mobile (ins richtige dir wechseln)
+foreman start web
+```
+
 ## Google Docs Sammlung von Ideen:
 https://docs.google.com/document/d/1wqhUEl61v_4DUfruozFuAm6QYn54y0OggV536aWGpmk/edit#
 
