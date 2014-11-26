@@ -1,9 +1,13 @@
-var db = require("./db");
+var db = require("db.js");
 var express = require('express');
 var app = express();
 
 function start() {
 	db.connect();
+
+	app.get("/", function(req, res) {
+		res.send("Hello world!");
+	});
 
 	app.get("/create", function(req, res){
 		db.createTestTable(function () {
