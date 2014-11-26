@@ -30,6 +30,10 @@ db.readTestTable = function(callback) {
 		console.log("Read.");
 		callback(JSON.stringify(result));
 	});
+	//returns something like this:
+	//{"command":"SELECT","rowCount":1,"oid":null,"rows":[{"max":8}],
+	//"fields":[{"name":"max","tableID":0,"columnID":0,"dataTypeID":23,
+	//"dataTypeSize":4,"dataTypeModifier":-1,"format":"text"}],"_parsers":[null],"rowAsArray":false}
 }	
 
 /*var client;
