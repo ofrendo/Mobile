@@ -16,7 +16,7 @@ db.createTestTable = function(callback) {
 
 	query.on("row", function(row) {
 		console.log("Test table created.");
-		if (typeof(callback) == "function") callback();
+		callback();
 	});
 };
 
@@ -26,7 +26,7 @@ db.insertTestTable = function (callback) {
 
 	query.on("row", function(row) {
 		console.log("Row inserted.");
-		if (typeof(callback) == "function") callback();
+		callback();
 	});
 };
 
@@ -37,7 +37,7 @@ db.readTestTable = function() {
 	query.on("row", function(row) {
 		console.log("Read table.")
 		console.log(row);
-		if (typeof(callback) == "function") callback();
+		callback();
 	})
 };
 
