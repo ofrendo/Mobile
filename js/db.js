@@ -37,7 +37,7 @@ db.readTestTable = function(callback) {
 	query.on("row", function(row) {
 		console.log("Read table.")
 		console.log(row);
-		callback();
+		callback(JSON.stringify(row));
 	})
 };
 

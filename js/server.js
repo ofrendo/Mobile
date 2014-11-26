@@ -21,8 +21,8 @@ function start(db) {
 	});
 
 	app.get("/read", function(req, res){
-		db.readTestTable(function () {
-			res.send("Done");
+		db.readTestTable(function(result) {
+			res.send("Done: " + result);
 		});
 	});
 
