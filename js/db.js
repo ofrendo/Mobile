@@ -3,7 +3,7 @@ var pg = require('pg');
 var db = exports;
 
 var query = function(text, values, cb) {
-	pg.connect(function(err, client, done) {
+	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 		client.query(text, function(err, result) {
 			done();
 			cb(err, result);
