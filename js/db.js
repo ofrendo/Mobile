@@ -6,7 +6,7 @@ var client;
 db.connect = function(callback) {
 	pg.connect(process.env.DATABASE_URL, function(err, c) {
 		client = c;
-		callback();
+		if (typeof(callback) == "function") callback();
 	});
 }
 
@@ -16,7 +16,7 @@ db.createTestTable = function(callback) {
 
 	query.on("row", function(row) {
 		console.log("Test table created.");
-		callback();
+		if (typeof(callback) == "function") callback();
 	});
 };
 
@@ -26,7 +26,7 @@ db.insertTestTable = function (callback) {
 
 	query.on("row", function(row) {
 		console.log("Row inserted.");
-		callback();
+		if (typeof(callback) == "function") callback();
 	});
 };
 
@@ -37,7 +37,7 @@ db.readTestTable = function() {
 	query.on("row", function(row) {
 		console.log("Read table.")
 		console.log(row);
-		callback(JSON.stringify(row));
+		if (typeof(callback) == "function") callback();
 	})
 };
 
