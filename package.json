@@ -4,10 +4,11 @@
   "description": "Mobile node.js backend",
   "main": "index.js",
   "scripts": {
-    "start": "node be/index.js"
+    "start": "node index.js"
   },
   "dependencies": {
-    "express": "~4.9.x"
+    "pg": "3.x",
+    "express": "~4.9.x",
   },
   "engines": {
     "node": "0.10.x"
