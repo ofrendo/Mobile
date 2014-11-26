@@ -30,7 +30,7 @@ db.insertTestTable = function (callback) {
 	});
 };
 
-db.readTestTable = function() {
+db.readTestTable = function(callback) {
 	var sql = "SELECT MAX(num) FROM test";
 	var query = client.query(sql);
 
