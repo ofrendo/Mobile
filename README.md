@@ -40,6 +40,9 @@ Danach muss Git noch gesagt werden, dass dieser Key wirklich benutzt werden soll
 ```
 Host github.com
  IdentityFile ~/.ssh/work_laptop
+ 
+Host heroku.com
+ IdentityFile ~/.ssh/work_laptop
 ```
 
 Bei Problemen ist [hier](https://help.github.com/articles/generating-ssh-keys/) die Guide.
