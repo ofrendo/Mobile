@@ -2,8 +2,6 @@ var express = require('express');
 var app = express();
 
 function start(db) {
-	db.connect();
-
 	app.get("/", function(req, res) {
 		res.send("Hello world!");
 	});
