@@ -2,12 +2,12 @@ var pg = require('pg');
 
 var db = exports;
 
-var query = function(text, values, cb) {
+var query = function(text, cb) {
 	pg.connect(process.env.DATABASE_URL, function(err, client, done) {
 		client.query(text, function(err, result) {
 			done();
 			cb(err, result);
-		})
+		});
 	});
 }
 
