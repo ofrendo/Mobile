@@ -12,7 +12,7 @@ console.log(dbUrl);
 var query = function(text, cb) {
 	pg.connect(dbUrl, function(err, client, done) {
 		if (err) {
-			console.log("Error during query:");
+			console.log("Error during connect:");
 			console.log(err);
 		}
 		client.query(text, function(err, result) {
@@ -21,6 +21,7 @@ var query = function(text, cb) {
 		});
 	});
 }
+db.query = query;
 
 db.createTestTable = function(callback) {
 	query("CREATE TABLE test (num SERIAL, name varchar(20))", function(error, result) {
