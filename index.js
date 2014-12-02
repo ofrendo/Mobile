@@ -1,4 +1,4 @@
-var db = require("./js/db");
+var router = require("./js/route");
 var server = require("./js/server");
 
-server.start(db);
+server.start(router);

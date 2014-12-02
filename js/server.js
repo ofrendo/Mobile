@@ -1,30 +1,17 @@
-var express = require('express');
+var express = require("express");
 var app = express();
 
-function start(db) {
-	app.get("/", function(req, res) {
-		res.send("Hello world!");
-	});
+function start(router) {
+	console.log("Starting server...");
+	for (var i = 0; i < router.routes.length; i++) {
+		var route = router.routes[i];
+		app[route.method](route.path, route.callback);
+		console.log("Added API call " + route.path);
+	}
 
-	app.get("/create", function(req, res){
-		db.createTestTable(function () {
-			res.send("Done");
-		});
-	});
-
-	app.get("/insert", function(req, res){
-		db.insertTestTable(function () {
-			res.send("Done");
-		});
-	});
-
-	app.get("/read", function(req, res){
-		db.readTestTable(function(result) {
-			res.send("Done: " + result);
-		});
-	});
-
-	app.listen(process.env.PORT || 5000);
+	var port = process.env.PORT || 5000;
+	app.listen(port);
+	console.log("Server started on port " + port);
 }
 
 exports.start = start;

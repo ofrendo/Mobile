@@ -1,22 +1,43 @@
 Mobile Projekt 5. Semester
 ======
 
-## Backend Infos
+# Backend Infos
 Nur notwendig falls lokal laufen soll.
 
-# Vor erstem Laufen
+## Vor erstem Laufen
 Module installieren:
 ```
-npm install express --g (Express framework)
-npm install pg --g (Postgress module)
+npm install express (Express framework)
+npm install pg (Postgress module)
 ```
 
-# Lokal laufen lassen
+## Lokal laufen lassen
 ```
 cd mobile (ins richtige dir wechseln)
 foreman start web
 ```
 
+## SQL Zeugs
+Postgres installieren. Im Git Bash:
+```
+heroku pg:psql
+
+Lokal (vor jedem Laufen?):
+export DATABASE_URL=postgres:///$(whoami)
+PGUSER=postgres PGPASSWORD={ausgesuchtesPW} psql
+```
+
+Nützliche Postgres Befehle:
+```
+Serverdaten kopieren:
+PGUSER=postgres PGPASSWORD={ausgesuchtesPW} heroku pg:pull HEROKU_POSTGRESQL_AMBER localDB --app thawing-stream-4939
+
+\list [Liste Datenbanken]
+\c {Datenbankname} [Verbinde mit Datenbank]
+\dt [Liste Tabellen in Datenbank]
+```
+
+# Andere Infos 
 ## Google Docs Sammlung von Ideen:
 https://docs.google.com/document/d/1wqhUEl61v_4DUfruozFuAm6QYn54y0OggV536aWGpmk/edit#
 
