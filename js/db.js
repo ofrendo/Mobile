@@ -1,13 +1,13 @@
 var pg = require("pg");
 
-console.log("Using database: ");
-console.log(process.env.DATABASE_URL);
-
 var db = exports;
 
-var dbUrl = (process.env.port) ? //if port is defined its on heroku server
+var dbUrl = (process.env.PORT) ? //if port is defined its on heroku server
 			process.env.DATABASE_URL :
 			"postgres://postgres:root@localhost:5432/localDB";
+
+console.log("Using database: ");
+console.log(dbUrl);
 
 var query = function(text, cb) {
 	pg.connect(dbUrl, function(err, client, done) {
