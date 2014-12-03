@@ -5,6 +5,7 @@ These are the API calls that can be made to the backend.
 #### Creating a user
 ```
 POST /user
+Request body: JSON user object
 
 //Sample usage:
 var sampleUser = {
@@ -50,6 +51,7 @@ Status codes:
 #### Update user
 ```
 PUT /user/:user_id
+Request body: JSON user object
 ```
 
 For sample usage see `POST /user`.
