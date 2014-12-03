@@ -30,11 +30,14 @@ foreman start web
 
 Nützliche Postgres Befehle:
 ```
-Serverdaten kopieren:
+Serverdaten kopieren (funktioniert nicht?):
 PGUSER=postgres PGPASSWORD={ausgesuchtesPW} heroku pg:pull HEROKU_POSTGRESQL_AMBER localDB --app thawing-stream-4939
 
+Lokal Tabellen erstellen:
+PGUSER=postgres PGPASSWORD={ausgesuchtesPW} psql -d "{Datenbankname}" -a -f tableCreation.sql 
+
 \list [Liste Datenbanken]
-\c {Datenbankname} [Verbinde mit Datenbank]
+\c "{Datenbankname}"" [Verbinde mit Datenbank]
 \dt [Liste Tabellen in Datenbank]
 ```
 

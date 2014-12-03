@@ -12,7 +12,7 @@ function start(router) {
 	for (var i = 0; i < router.routes.length; i++) {
 		var route = router.routes[i];
 		app[route.method](route.path, route.callback);
-		console.log("Added API call " + route.path);
+		console.log("Added API call " + route.method + " " + route.path);
 	}
 
 	var port = process.env.PORT || 5000;

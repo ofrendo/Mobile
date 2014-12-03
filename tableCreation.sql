@@ -1,6 +1,6 @@
-DROP TABLE users;
+DROP TABLE IF EXISTS users;
 CREATE TABLE users (
-  userID SERIAL PRIMARY KEY,
+  user_id SERIAL PRIMARY KEY,
   email text,
   username text,
   password text,
