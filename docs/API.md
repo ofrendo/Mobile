@@ -44,25 +44,36 @@ Status codes:
 - 200: OK
 - 400: Bad request, for example when sending a string instead of a number as `user_id`
 - 401: Not logged in
+- 403: Forbidden, trying to access info about other user
 - 404: Not found
 
 #### Update user
+```
+PUT /user/:user_id
+```
 
-Status codes: 
-- 501: Not implemented yet
+For sample usage see `POST /user`.
+
+Status codes:
+- 200: OK
+- 400: Bad request, for example when sending a string instead of a number as `user_id`
+- 401: Not logged in
+- 403: Forbidden, trying to access update other user
+- 404: Not found
 
 #### Delete user
 ```
 DELETE /user/:user_id
 ```
 
-Only the user himself may delete the user and he must be logged in.
+Only the user himself may delete the user and he must be logged in. Also logs the user out.
 
 Status codes:
 - 200: OK
 - 400: Bad request, for example when sending a string instead of a number as `user_id`
 - 401: Not logged in
-- 404: Not found
+- 403: Trying to delete a different user (different `user_id`)
+- 500: Internal server error trying to delete user
 
 ## Session management
 #### Login
@@ -86,11 +97,11 @@ $.ajax({
 });
 ```
 
-Returns a user JSON object like in `user/:user_id`.
+`data` in `success` returns a user JSON object like in `user/:user_id`.
 
 Status codes:
-- 200: Successful login
-- 401: Error during login
+- 200: OK
+- 400: Error during login
 
 #### Logout
 ```
@@ -98,7 +109,7 @@ POST /logout
 ```
 
 Status codes:
-- 200: Successful login
+- 200: Successful logout
 
 ## Unit testing
 Open `/test` in a browser.

@@ -9,13 +9,13 @@ var dbUrl = (process.env.PORT) ? //if port is defined its on heroku server
 console.log("Using database: ");
 console.log(dbUrl);
 
-var query = function(text, cb) {
+var query = function(sqlQuery, cb) {
 	pg.connect(dbUrl, function(err, client, done) {
 		if (err) {
 			console.log("Error during connect:");
 			console.log(err);
 		}
-		client.query(text, function(err, result) {
+		client.query(sqlQuery, function(err, result) {
 			done();
 			cb(err, result);
 		});

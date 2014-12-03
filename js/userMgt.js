@@ -15,6 +15,15 @@ userMgt.getUser = function(user_id, callback) {
 	db.query(sql, callback);
 }
 
+userMgt.updateUser = function(user, callback) {
+	user.password = cryptoMgt.hashPassword(user.password);
+	var sql = {
+		text: "UPDATE users SET email=$1, username=$2, password=$3, name=$4 WHERE user_id=$5",
+		values: [user.email, user.username, user.password, user.name, user.user_id]
+	};
+	db.query(sql, callback);
+}
+
 userMgt.deleteUser = function(user_id, callback) {
 	var sql = "DELETE FROM users WHERE user_id=" + user_id;
 	db.query(sql, callback);

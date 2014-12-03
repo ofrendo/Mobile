@@ -5,13 +5,15 @@ var sampleUser = {
 	password: "helloPass",
 	name: "Hello World"
 };
+var updatedSampleUser = JSON.parse(JSON.stringify(sampleUser));
+updatedSampleUser.email = "updated@email.de";
 
 $.ajaxSetup({
 	async: false
 });
 
 QUnit.asyncTest("User tests", function() {
-	expect(5);
+	expect(7);
 
 	$.ajax({
 		type: "POST",
@@ -29,6 +31,7 @@ QUnit.asyncTest("User tests", function() {
 		},
 		success: function(data, textStatus, jqXHR) {
 			sampleUser.user_id = data.user_id;
+			updatedSampleUser.user_id = data.user_id;
 		},
 		complete: onAsyncComplete("User login")
 	});
@@ -38,6 +41,17 @@ QUnit.asyncTest("User tests", function() {
 		url: "/user/" + sampleUser.user_id,
 		complete: onAsyncComplete("User get info")
 	});
+
+	$.ajax({
+		type: "PUT",
+		url: "/user/" + sampleUser.user_id,
+		data: {user: updatedSampleUser},
+		success: function(data, textStatus, jqXHR) {
+			QUnit.equal(data.email, updatedSampleUser.email, "Email should be updated");
+			sampleUser = data;
+		},
+		complete: onAsyncComplete("User update info")
+	})
 
 	$.ajax({
 		type: "DELETE",
@@ -52,7 +66,7 @@ QUnit.asyncTest("User tests", function() {
 	});
 });
 
-var counter = 5;
+var counter = 6;
 function done() { --counter || start() };
 
 var onAsyncComplete = function(text) {
