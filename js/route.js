@@ -83,7 +83,7 @@ router.routes = [
 				}
 				else {
 					console.log("Logging user in:");
-					console.log(result);
+					console.log(result.rows[0]);
 					sessionMgt.setUser(req, result.rows[0]);
 					res.status(200).send(req.session.user);
 				}
