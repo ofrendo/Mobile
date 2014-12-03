@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS destination;
 DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS message;
 
+
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
   email VARCHAR(100) NOT NULL,
