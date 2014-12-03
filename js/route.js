@@ -104,10 +104,21 @@ router.routes = [
 	}),
 	new Route("/user/:user_id", "get", function(req, res) { //get information about a certain user
 		var user_id = req.params.user_id;
+		if (isNaN(user_id)) {
+			res.status(400).send("");
+		}
 		console.log(req.url);
 		console.log("Retrieving user info for ID: " + user_id);
 		userMgt.getUser(user_id, function(err, result) {
-			res.send(result.rows[0]);
+			if (result.rows.length === 1) {
+				var userData = result.rows[0];
+				delete userData["password"];
+				res.send(userData);
+			}
+			else {
+				res.status(404).send("");
+			}
+			
 		});
 	}),
 	new Route("/user/:user_id", "put", function(req, res) {
