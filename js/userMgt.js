@@ -6,6 +6,7 @@ var userMgt = exports;
 userMgt.createUser = function(user, callback) {
 	user.password = cryptoMgt.hashPassword(user.password);
 	var sql = "INSERT INTO users (email, username, password, name) VALUES('" + user.email + "', '" + user.username + "', '" + user.password + "', '" + user.name + "') RETURNING user_id";
+	console.log(sql);
 	db.query(sql, callback);
 }
 
