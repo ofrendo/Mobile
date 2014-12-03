@@ -29,19 +29,6 @@ userMgt.doLogin = function(username, password, callback) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 exports.userMgt = userMgt;
 
 
