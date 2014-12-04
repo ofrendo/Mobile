@@ -55,7 +55,7 @@ CREATE TABLE location (
 );
 
 CREATE TABLE message (
-	message_id SERIAL PRIMARY KEY,
+	msg_id SERIAL PRIMARY KEY,
 	user_id INT REFERENCES users(user_id),
 	trip_id INT REFERENCES trip(trip_id),
 	msg_text TEXT NOT NULL,
