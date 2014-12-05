@@ -49,118 +49,14 @@ router.routes = [
 
 	}),
 	//USER API CALLS
-	new Route("/user", "post", function(req, res) { 
-		//create a user, send back the ID it was created with
-		userMgt.createUser(req.body.user, function(err, result) {
-			if (err) {
-				res.status(500).send(JSON.stringify({message: "Error during user creation."}));
-				console.log("Error during user creation:");
-				console.log(err);
-			}
-			else {
-				console.log("Created user:");
-				console.log(result.rows[0]);
-				var user = req.body.user;
-				user.user_id = result.rows[0].user_id;
-				sessionMgt.setUser(req, user);
-				res.status(200).send("");
-			}
-		});
-	}),
-	new Route("/login", "post", function(req, res) { //login
-		if (sessionMgt.isLoggedIn(req)) {
-			//Already logged in
-			console.log("User already logged in.");
-			res.status(200).send(req.session.user);
-		}
-		else {
-			var username = req.body.username;
-			var password = req.body.password;
-			userMgt.doLogin(username, password, function(err, result) {
-				if (err || result.rows.length === 0) {
-					res.status(400).send("");
-				}
-				else {
-					console.log("Logging user in:");
-					console.log(result.rows[0]);
-					sessionMgt.setUser(req, result.rows[0]);
-					res.status(200).send(req.session.user);
-				}
-			});
-		}
-	}),
-	new Route("/logout", "post", function(req, res) { //logout
-		sessionMgt.doLogout(req);
-		res.status(200).send("");
-	}),
-	new Route("/user/*", "all", function(req, res, next) {
-		if (sessionMgt.isLoggedIn(req)) {
-			next();			
-		}	
-		else {
-			res.status(401).send(JSON.stringify({message: "Not logged in."}));
-		}
-	}),
-	new Route("/user/:user_id", "all", function(req, res, next) {
-		var user_id = req.params.user_id;
-		if (isNaN(user_id)) {
-			res.status(400).send("");
-			return;
-		}
-
-		if (req.params.user_id != req.session.user.user_id) {
-			res.status(403).send("");
-			return;
-		}
-
-		next();
-	}),
-	new Route("/user/:user_id", "get", function(req, res) { //get information about a certain user
-		var user_id = req.params.user_id;
-		console.log(req.url);
-		console.log("Retrieving user info for ID: " + user_id);
-		userMgt.getUser(user_id, function(err, result) {
-			if (result.rows.length === 1) {
-				var userData = result.rows[0];
-				delete userData["password"];
-				res.send(userData);
-			}
-			else {
-				res.status(404).send("");
-			}
-			
-		});
-	}),
-	new Route("/user/:user_id", "put", function(req, res) {
-		var newUser = req.body.user;
-		if (newUser.user_id != req.session.user.user_id) {
-			res.status(403).send("");
-			return;
-		}
-
-		userMgt.updateUser(newUser, function(err, result) {
-			if (err) {
-				res.status(500).send("");
-			}
-			else {
-				res.send(newUser);
-			}
-		});
-	}),
-	new Route("/user/:user_id", "delete", function(req, res) {
-		var user_id = req.session.user.user_id;
-		userMgt.deleteUser(user_id, function(err, result) {
-			console.log("Result user delete:");
-			console.log(result);
-			if (result.rowCount === 1) {
-				sessionMgt.doLogout(req);
-				res.status(200).send("");
-			}
-			else {
-				res.status(500).send("");
-			}
-		});
-	})
+	new Route("/user", "post", userMgt.onCreateUser),
+	new Route("/login", "post", userMgt.onLogin),
+	new Route("/logout", "post", userMgt.onLogout),
+	new Route("/user/*", "all", sessionMgt.onCheckSession),
+	new Route("/user/:user_id", "all", userMgt.onUserCRUD),
+	new Route("/user/:user_id", "get", userMgt.onGetUser),
+	new Route("/user/:user_id", "put", userMgt.onUpdateUser),
+	new Route("/user/:user_id", "delete", userMgt.onDeleteUser)
 ];
 
 exports.router = router;

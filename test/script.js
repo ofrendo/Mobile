@@ -13,7 +13,7 @@ $.ajaxSetup({
 });
 
 QUnit.asyncTest("User tests", function() {
-	expect(7);
+	expect(8);
 
 	$.ajax({
 		type: "POST",
@@ -22,6 +22,12 @@ QUnit.asyncTest("User tests", function() {
 		complete: onAsyncComplete("User create")
 	});
 
+	$.ajax({
+		type: "POST",
+		url: "/logout",
+		complete: onAsyncComplete("User logout")
+	});
+	
 	$.ajax({
 		type: "POST",
 		url: "/login",

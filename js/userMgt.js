@@ -1,42 +1,159 @@
 var db = require("./db");
 var cryptoMgt = require("./cryptoMgt");
+var sessionMgt = require("./sessionMgt");
 
 var userMgt = exports;
 
 userMgt.createUser = function(user, callback) {
-	user.password = cryptoMgt.hashPassword(user.password);
-	var sql = "INSERT INTO users (email, username, password, name) VALUES('" + user.email + "', '" + user.username + "', '" + user.password + "', '" + user.name + "') RETURNING user_id";
+	var sql = {
+		text: "INSERT INTO users (email, username, password, name) " +
+			  " VALUES($1, $2, crypt($3, gen_salt('bf', 8)), $4) " + 
+			  " RETURNING user_id",
+		values: [user.email, user.username, user.password, user.name]	
+	};
 	db.query(sql, callback);
 }
 
 userMgt.getUser = function(user_id, callback) {
-	var sql = "SELECT * FROM users WHERE user_id=" + user_id;
-	console.log(sql);
+	var sql = {
+		text: "SELECT * FROM users WHERE user_id=$1",
+		values: [user_id]
+	}
 	db.query(sql, callback);
 }
 
 userMgt.updateUser = function(user, callback) {
-	user.password = cryptoMgt.hashPassword(user.password);
 	var sql = {
-		text: "UPDATE users SET email=$1, username=$2, password=$3, name=$4 WHERE user_id=$5",
+		text: "UPDATE users SET email=$1, username=$2, password=crypt($3, password), name=$4 WHERE user_id=$5",
 		values: [user.email, user.username, user.password, user.name, user.user_id]
 	};
 	db.query(sql, callback);
 }
 
 userMgt.deleteUser = function(user_id, callback) {
-	var sql = "DELETE FROM users WHERE user_id=" + user_id;
+	var sql = {
+		text: "DELETE FROM users WHERE user_id=$1",
+		values: [user_id]
+	}
 	db.query(sql, callback);
 }
 
 userMgt.doLogin = function(username, password, callback) {
-	var hashedPW = cryptoMgt.hashPassword(password);
-	var sql = "SELECT * FROM users WHERE username='" + username + "'" + 
-			  " AND password='" + hashedPW + "'";
+	var sql = {
+		text: "SELECT * FROM users WHERE username=$1 " + 
+			  " AND password=crypt($2, password)",
+		values: [username, password]
+	};
 	db.query(sql, callback);
 }
+userMgt.onLogin = function(req, res) { //login
+	if (sessionMgt.isLoggedIn(req)) {
+		//Already logged in
+		console.log("User already logged in.");
+		res.status(200).send(req.session.user);
+	}
+	else {
+		var username = req.body.username;
+		var password = req.body.password;
+		userMgt.doLogin(username, password, function(err, result) {
+			if (err || result.rows.length === 0) {
+				res.status(400).send("");
+			}
+			else {
+				console.log("Logging user in:");
+				console.log(result.rows[0]);
+				sessionMgt.setUser(req, result.rows[0]);
+				res.status(200).send(req.session.user);
+			}
+		});
+	}
+};
 
+userMgt.onLogout = function(req, res) { //logout
+	sessionMgt.doLogout(req);
+	res.status(200).send("");
+}
 
+userMgt.onCreateUser = function(req, res) { 
+	//create a user, send back the ID it was created with
+	userMgt.createUser(req.body.user, function(err, result) {
+		if (err) {
+			res.status(500).send(JSON.stringify({message: "Error during user creation."}));
+			console.log("Error during user creation:");
+			console.log(err);
+		}
+		else {
+			console.log("Created user:");
+			console.log(result.rows[0]);
+			var user = req.body.user;
+			user.user_id = result.rows[0].user_id;
+			sessionMgt.setUser(req, user);
+			res.status(200).send("");
+		}
+	});
+}
+
+userMgt.onUserCRUD = function(req, res, next) {
+	var user_id = req.params.user_id;
+	if (isNaN(user_id)) {
+		res.status(400).send("");
+		return;
+	}
+	if (req.params.user_id != req.session.user.user_id) {
+		res.status(403).send("");
+		return;
+	}
+	next();
+}
+
+userMgt.onGetUser = function(req, res) { //get information about a certain user
+	var user_id = req.params.user_id;
+	console.log(req.url);
+	console.log("Retrieving user info for ID: " + user_id);
+	userMgt.getUser(user_id, function(err, result) {
+		if (result.rows.length === 1) {
+			var userData = result.rows[0];
+			delete userData["password"];
+			res.send(userData);
+		}
+		else {
+			res.status(404).send("");
+		}
+		
+	});
+}
+
+userMgt.onUpdateUser = function(req, res) {
+	var newUser = req.body.user;
+	if (newUser.user_id != req.session.user.user_id) {
+		res.status(403).send("");
+		return;
+	}
+
+	userMgt.updateUser(newUser, function(err, result) {
+		if (err) {
+			res.status(500).send("");
+		}
+		else {
+			res.send(newUser);
+		}
+	});
+}
+
+userMgt.onDeleteUser = function(req, res) {
+	var user_id = req.session.user.user_id;
+	userMgt.deleteUser(user_id, function(err, result) {
+		console.log("Result user delete:");
+		console.log(result);
+		if (result.rowCount === 1) {
+			sessionMgt.doLogout(req);
+			res.status(200).send("");
+		}
+		else {
+			res.status(500).send("");
+		}
+	});
+}
 
 exports.userMgt = userMgt;
 
