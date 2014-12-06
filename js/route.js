@@ -1,5 +1,6 @@
 var userMgt = require("./userMgt");
 var sessionMgt = require("./sessionMgt");
+var tripMgt = require("./tripMgt");
 
 /*
 path: path with which to make an API call
@@ -14,7 +15,6 @@ function Route(path, method, callback) {
 
 //These are available elsewhere as router.routes
 var router = exports;
-
 router.routes = [
 	new Route("/", "get", function(req, res) { //Server status service
 		res.send("Server is running.");
@@ -49,14 +49,14 @@ router.routes = [
 
 	}),
 	//USER API CALLS
-	new Route("/user", "post", userMgt.onCreateUser),
 	new Route("/login", "post", userMgt.onLogin),
 	new Route("/logout", "post", userMgt.onLogout),
+	new Route("/user", "post", userMgt.crud.onCreate),
 	new Route("/user/*", "all", sessionMgt.onCheckSession),
-	new Route("/user/:user_id", "all", userMgt.onUserCRUD),
-	new Route("/user/:user_id", "get", userMgt.onGetUser),
-	new Route("/user/:user_id", "put", userMgt.onUpdateUser),
-	new Route("/user/:user_id", "delete", userMgt.onDeleteUser)
+	new Route("/user/:user_id", "all", userMgt.crud.onAll),
+	new Route("/user/:user_id", "get", userMgt.crud.onRead),
+	new Route("/user/:user_id", "put", userMgt.crud.onUpdate),	
+	new Route("/user/:user_id", "delete", userMgt.crud.onDelete)
 ];
 
 exports.router = router;

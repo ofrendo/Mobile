@@ -19,7 +19,7 @@ CREATE TABLE trip (
 	created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
 	start_date TIMESTAMP, 
 	end_date TIMESTAMP
-);
+); 
 
 CREATE TABLE user_trip (
 	user_id INT REFERENCES users(user_id),

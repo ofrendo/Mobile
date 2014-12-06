@@ -1,7 +1,102 @@
 var db = require("./db");
-var cryptoMgt = require("./cryptoMgt");
+var crud = require("./crud");
 var sessionMgt = require("./sessionMgt");
 
+exports.crud = new crud.CRUDModule("user",
+	function(user) {
+		return {
+			text: "INSERT INTO users (email, username, password, name) " +
+				  " VALUES($1, $2, crypt($3, gen_salt('bf', 8)), $4) " + 
+				  " RETURNING user_id",
+			values: [user.email, user.username, user.password, user.name]
+		};
+	},
+	function(user_id) {
+		return {
+			text: "SELECT * FROM users WHERE user_id=$1",
+			values: [user_id]
+		};
+	},
+	function(user) {
+		return {
+			text: "UPDATE users SET email=$1, username=$2, password=crypt($3, password), name=$4 WHERE user_id=$5",
+			values: [user.email, user.username, user.password, user.name, user.user_id]
+		};
+	},
+	function(user_id) {
+		return {
+			text: "DELETE FROM users WHERE user_id=$1",
+			values: [user_id]
+		};
+	}
+);
+
+exports.crud.beforeSendCreate = function(req, res, user) {
+	sessionMgt.setUser(req, user);
+}
+exports.crud.beforeSendRead = function(req, res, user) {
+	delete user["password"];
+}
+exports.crud.beforeSQLCheckUpdate = function(req, res, user) {
+	return req.session.user.user_id == user.user_id;
+}
+exports.crud.beforeSendUpdate = function(req, res, user) {
+	delete user["password"];
+}
+exports.crud.beforeSendDelete = function(req, res) {
+	sessionMgt.doLogout();
+}
+
+exports.crud.onAll = function(req, res, next) {
+	var user_id = req.params.user_id;
+	if (isNaN(user_id)) {
+		res.status(400).send("");
+		return;
+	}
+	if (req.params.user_id != req.session.user.user_id) {
+		res.status(403).send("");
+		return;
+	}
+	next();
+};
+
+function doLogin(username, password, callback) {
+	var sql = {
+		text: "SELECT * FROM users WHERE username=$1 " + 
+			  " AND password=crypt($2, password)",
+		values: [username, password]
+	};
+	db.query(sql, callback);
+}
+exports.onLogin = function(req, res) { //login
+	if (sessionMgt.isLoggedIn(req)) {
+		//Already logged in
+		console.log("User already logged in.");
+		res.status(200).send(req.session.user);
+	}
+	else {
+		var username = req.body.username;
+		var password = req.body.password;
+		doLogin(username, password, function(err, result) {
+			if (err || result.rows.length === 0) {
+				res.status(400).send("");
+			}
+			else {
+				console.log("Logging user in:");
+				console.log(result.rows[0]);
+				sessionMgt.setUser(req, result.rows[0]);
+				res.status(200).send(req.session.user);
+			}
+		});
+	}
+};
+
+exports.onLogout = function(req, res) { //logout
+	sessionMgt.doLogout(req);
+	res.status(200).send("");
+}
+
+/*
 var userMgt = exports;
 
 userMgt.createUser = function(user, callback) {
@@ -88,7 +183,7 @@ userMgt.onCreateUser = function(req, res) {
 			var user = req.body.user;
 			user.user_id = result.rows[0].user_id;
 			sessionMgt.setUser(req, user);
-			res.status(200).send("");
+			res.send(user.user_id);
 		}
 	});
 }
@@ -125,7 +220,7 @@ userMgt.onGetUser = function(req, res) { //get information about a certain user
 
 userMgt.onUpdateUser = function(req, res) {
 	var newUser = req.body.user;
-	if (newUser.user_id != req.session.user.user_id) {
+	if (newUser.user_id != req.session.user.user_id) { //need to check if user  being sent is actually the own user
 		res.status(403).send("");
 		return;
 	}
@@ -156,6 +251,7 @@ userMgt.onDeleteUser = function(req, res) {
 }
 
 exports.userMgt = userMgt;
+*/
 
 
 
