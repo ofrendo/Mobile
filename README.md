@@ -7,6 +7,7 @@ Module installieren:
 ```
 npm install express (Express framework)
 npm install pg (Postgress module)
+npm install socket.io (Websockets module)
 ```
 
 ## SQL Zeugs

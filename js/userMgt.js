@@ -19,7 +19,8 @@ exports.crud = new crud.CRUDModule("user",
 	},
 	function(user) {
 		return {
-			text: "UPDATE users SET email=$1, username=$2, password=crypt($3, password), name=$4 WHERE user_id=$5",
+			text: "UPDATE users SET email=$1, username=$2, password=crypt($3, password), name=$4 WHERE user_id=$5 " + 
+				  " RETURNING user_id, email, username, name",
 			values: [user.email, user.username, user.password, user.name, user.user_id]
 		};
 	},
@@ -44,7 +45,7 @@ exports.crud.beforeSendUpdate = function(req, res, user) {
 	delete user["password"];
 }
 exports.crud.beforeSendDelete = function(req, res) {
-	sessionMgt.doLogout();
+	sessionMgt.doLogout(req, res);
 }
 
 exports.crud.onAll = function(req, res, next) {

@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS trip;
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
   email VARCHAR(100) NOT NULL,
-  username VARCHAR(30) NOT NULL,
+  username VARCHAR(30) NOT NULL UNIQUE,
   password VARCHAR(112) NOT NULL,
   name VARCHAR(100)
 );

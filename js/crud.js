@@ -12,7 +12,7 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 		doQuery(getSqlRead(object_id), callback);
 	}
 	function doUpdate(object, callback) {
-		doQuery(getSqlUpdate(object_id), callback);
+		doQuery(getSqlUpdate(object), callback);
 	}
 	function doDelete(object_id, callback) {
 		doQuery(getSqlDelete(object_id), callback);
@@ -80,13 +80,16 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 			}
 		});
 	}
-	this.onDelete = function(req, res, beforeSQLCheck, beforeSend) {
+	this.onDelete = function(req, res) {
 		doDelete(req.params[self.objectIDName], function(err, result) {
 			if (err || result.rowCount !== 1) {
 				res.status(500).send(JSON.stringify({message: "Error during " + self.objectName + " delete."}));
+				console.log("Error during " + self.objectName + " delete:");
+				console.log(err);
 			}
 			else {
 				if (result.rowCount === 1) {
+					console.log("Deleted " + self.objectName);
 					if (typeof(self.beforeSendDelete) == "function") self.beforeSendDelete(req, res); 
 					res.status(200).end();
 				}

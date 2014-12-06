@@ -10,7 +10,8 @@
     "pg": "3.x",
     "body-parser": "^1.7.0",
     "express": "~4.9.x",
-    "express-session": "^1.7.6"
+    "express-session": "^1.7.6",
+    "socket.io": "~0.9.6"
   },
   "engines": {
     "node": "0.10.x"
