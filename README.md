@@ -21,6 +21,9 @@ heroku pg:psql (verbindet mit Heroku PSQL)
 Lokal (vor jedem Laufen?):
 export DATABASE_URL=postgres:///$(whoami)
 PGUSER=postgres PGPASSWORD={ausgesuchtesPW} psql
+
+Einmal im PostgreSQL:
+CREATION EXTENSION pgcrypto
 ```
 
 ## Lokal laufen lassen
