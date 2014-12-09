@@ -31,11 +31,10 @@ function getSID(cookie) {
 }
 
 exports.setUser = function(req, user) {
-	//console.log(req);
 	delete user["password"];
 	req.session.user = user;
-	console.log("----Set user session: ----");
-	console.log(req.session);
+	//console.log("----Set user session: ----");
+	//console.log(req.session);
 }
 
 exports.onCheckSession = function(req, res, next) {

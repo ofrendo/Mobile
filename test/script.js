@@ -91,10 +91,15 @@ var chatUser = {
 };
 
 QUnit.test("Chat tests", function(assert) {
-	expect(1);
+	assert.expect(6);
 
-	var done;
-	done = assert.async();
+	var doneLogin = assert.async();
+	var doneConnect = assert.async();
+	var doneRoomJoin = assert.async();
+	var doneMessageSent = assert.async();
+	var doneRoomLeave = assert.async();
+	var doneLogout = assert.async();
+
 	$.ajax({
 		type: "POST",
 		url: "/login",
@@ -106,21 +111,49 @@ QUnit.test("Chat tests", function(assert) {
 			var socket = io.connect("http://localhost:5000", { 
 				reconnection: false
 			});
-			//socket.emit("hw", "Hello world!");
-			var testRoom = {trip_id: 1};
-			socket.emit("room.join", testRoom);
 
+			socket.on("room.previousMessages", function(previousMessages) {
+				console.log("Chat room joined");
+				assert.ok(true, "Chat room joined");
+				doneRoomJoin();
+			});
+			socket.on("msg.sent", function() {
+				console.log("Chat message sent and recieved");
+				assert.ok(true, "Chat message sent and recieved");
+				doneMessageSent();
+			});
+			socket.on("room.left", function() {
+				console.log("Chat room left");
+				assert.ok(true, "Chat room left");
+				doneRoomLeave();
 
-			//Log out at the end
-			/*
-			done = assert.async();
-			$.ajax({
-				type: "POST",
-				url: "/logout",
-				complete: onAsyncComplete("Chat user logout", done)
-			});*/
+				socket.disconnect();
+				//Log out at the end
+				$.ajax({
+					type: "POST",
+					url: "/logout",
+					complete: onAsyncComplete("Chat user logout", doneLogout)
+				});
+			});
+
+			socket.on("connect", function() {
+				assert.ok(true, "Connected to backend");
+				doneConnect();
+
+				//Join a room
+				var testRoom = {trip_id: 1};
+				socket.emit("room.join", testRoom);
+
+				//Send a message
+				var message = {msg_text: "Unit testing chat."};
+				socket.emit("msg.send", message);
+
+				//Leave the room and disconnect
+				socket.emit("room.leave");
+			});
+
 		},
-		complete: onAsyncComplete("Chat user login", done)
+		complete: onAsyncComplete("Chat user login", doneLogin)
 	});
 });
 
