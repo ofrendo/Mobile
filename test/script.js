@@ -108,7 +108,7 @@ QUnit.test("Chat tests", function(assert) {
 			password: chatUser.password
 		},
 		success: function(data, textStatus, jqXHR) {
-			var socket = io.connect("http://localhost:5000", { 
+			var socket = io.connect({ 
 				reconnection: false
 			});
 
