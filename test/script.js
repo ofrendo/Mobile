@@ -12,22 +12,26 @@ $.ajaxSetup({
 	async: false
 });
 
-QUnit.asyncTest("User tests", function() {
-	expect(8);
+QUnit.test("User tests", function(assert) {
+	assert.expect(8);
 
+	var done;
+	done = assert.async();
 	$.ajax({
 		type: "POST",
 		url: "/user",
 		data: {user: sampleUser},
-		complete: onAsyncComplete("User create")
+		complete: onAsyncComplete("User create", done)
 	});
 
+	done = assert.async();
 	$.ajax({
 		type: "POST",
 		url: "/logout",
-		complete: onAsyncComplete("User logout")
+		complete: onAsyncComplete("User logout", done)
 	});
 	
+	done = assert.async();
 	$.ajax({
 		type: "POST",
 		url: "/login",
@@ -39,15 +43,17 @@ QUnit.asyncTest("User tests", function() {
 			sampleUser.user_id = data.user_id;
 			updatedSampleUser.user_id = data.user_id;
 		},
-		complete: onAsyncComplete("User login")
+		complete: onAsyncComplete("User login", done)
 	});
 
+	done = assert.async();
 	$.ajax({
 		type: "GET",
 		url: "/user/" + sampleUser.user_id,
-		complete: onAsyncComplete("User get info")
+		complete: onAsyncComplete("User get info", done)
 	});
 
+	done = assert.async();
 	$.ajax({
 		type: "PUT",
 		url: "/user/" + sampleUser.user_id,
@@ -56,26 +62,69 @@ QUnit.asyncTest("User tests", function() {
 			QUnit.equal(data.email, updatedSampleUser.email, "Email should be updated");
 			sampleUser = data;
 		},
-		complete: onAsyncComplete("User update info")
+		complete: onAsyncComplete("User update info", done)
 	})
 
+	done = assert.async();
 	$.ajax({
 		type: "DELETE",
 		url: "/user/" + sampleUser.user_id,
-		complete: onAsyncComplete("User delete")
+		complete: onAsyncComplete("User delete", done)
 	});
 	
+	done = assert.async();
 	$.ajax({
 		type: "POST",
 		url: "/logout",
-		complete: onAsyncComplete("User logout")
+		complete: onAsyncComplete("User logout", done)
 	});
 });
 
-var counter = 6;
-function done() { --counter || start() };
+//var counter = 7;
+//function done() { --counter || QUnit.start() };
 
-var onAsyncComplete = function(text) {
+
+
+var chatUser = {
+	username: "chat_user",
+	password: "chat"
+};
+
+QUnit.test("Chat tests", function(assert) {
+	expect(1);
+
+	var done;
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/login",
+		data: {
+			username: chatUser.username,
+			password: chatUser.password
+		},
+		success: function(data, textStatus, jqXHR) {
+			var socket = io.connect("http://localhost:5000", { 
+				reconnection: false
+			});
+			//socket.emit("hw", "Hello world!");
+			var testRoom = {trip_id: 1};
+			socket.emit("room.join", testRoom);
+
+
+			//Log out at the end
+			/*
+			done = assert.async();
+			$.ajax({
+				type: "POST",
+				url: "/logout",
+				complete: onAsyncComplete("Chat user logout", done)
+			});*/
+		},
+		complete: onAsyncComplete("Chat user login", done)
+	});
+});
+
+var onAsyncComplete = function(text, done) {
     return function(jqXHR, textStatus) {
     	console.log("Ran: " + text);
 		QUnit.equal(jqXHR.status, 200, text);

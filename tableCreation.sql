@@ -13,6 +13,10 @@ CREATE TABLE users (
   name VARCHAR(100)
 );
 
+INSERT INTO users 
+	(email,username,password,name)
+	VALUES ('chat_user@gmail.com', 'chat_user', crypt('chat', gen_salt('bf', 8)), 'Chat user');
+
 CREATE TABLE trip (
 	trip_id SERIAL PRIMARY KEY,
 	name VARCHAR(50) NOT NULL,

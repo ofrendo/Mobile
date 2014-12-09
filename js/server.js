@@ -1,18 +1,26 @@
 var express = require("express");
 var session = require("express-session");
-var bodyParser = require('body-parser');
+var sessionMgt = require("./sessionMgt");
+var bodyParser = require("body-parser");
+var cookieParser = require("cookie-parser");
 var router = require("./route");
 var chat = require("./chat");
 
 var app = express();
 var server = require("http").createServer(app);
+
 var io = require("socket.io").listen(server);
 chat.start(io);
 
-app.use(session({secret: "put_a_better_secret_here"}));
+var sessionStore = sessionMgt.getSessionStore();
+app.use(session({
+	secret: "put_a_better_secret_here",
+	resave: false,
+	saveUninitialized: true,
+	store: sessionStore
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
 
 console.log("Starting server...");
 for (var i = 0; i < router.routes.length; i++) {
@@ -22,7 +30,7 @@ for (var i = 0; i < router.routes.length; i++) {
 }
 
 var port = process.env.PORT || 5000;
-app.listen(port);
+server.listen(port);
 
 
 

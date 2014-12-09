@@ -1,12 +1,45 @@
-var sessionMgt = exports;
+var session = require("express-session");
+
+var sessionStore;
+
+exports.getSessionStore = function() {
+	if (!sessionStore) {
+		sessionStore = new session.MemoryStore();
+	}
+	return sessionStore;
+}
+
+exports.getSessionFromCookie = function(cookie, callback) {
+	var sessionStore = exports.getSessionStore();
+	var sid = getSID(cookie);
+	console.log("SID: " + sid);
+	sessionStore.get(sid, function(param1, session) {
+		console.log(arguments);
+		if (typeof(callback) == "function") callback(session);
+	});
+}
+
+function getSID(cookie) {
+	var startIndex = cookie.indexOf("connect.sid");
+	var startString = cookie.substring(startIndex + "connect.sid=s%3A".length, cookie.length);
+	var endIndex = startString.indexOf(".");
+	if (endIndex == -1) {
+		endIndex = startString.length;
+	}
+	var sid = startString.substring(0, endIndex);
+	return sid;
+}
 
 exports.setUser = function(req, user) {
+	//console.log(req);
 	delete user["password"];
 	req.session.user = user;
+	console.log("----Set user session: ----");
+	console.log(req.session);
 }
 
 exports.onCheckSession = function(req, res, next) {
-	if (sessionMgt.isLoggedIn(req)) {
+	if (exports.isLoggedIn(req)) {
 		next();			
 	}	
 	else {
@@ -21,5 +54,3 @@ exports.isLoggedIn = function(req) {
 exports.doLogout = function(req) {
 	delete req.session["user"];
 }
-
-exports.sessionMgt = sessionMgt;
