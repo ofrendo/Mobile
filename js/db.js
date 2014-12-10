@@ -17,7 +17,7 @@ var query = function(sqlQuery, cb) {
 		}
 		client.query(sqlQuery, function(err, result) {
 			done();
-			cb(err, result);
+			if (typeof(cb) == "function") cb(err, result);
 		});
 	});
 }

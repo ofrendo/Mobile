@@ -12,9 +12,9 @@ exports.getSessionStore = function() {
 exports.getSessionFromCookie = function(cookie, callback) {
 	var sessionStore = exports.getSessionStore();
 	var sid = getSID(cookie);
-	console.log("SID: " + sid);
+	//console.log("SID: " + sid);
 	sessionStore.get(sid, function(param1, session) {
-		console.log(arguments);
+		//console.log(arguments);
 		if (typeof(callback) == "function") callback(session);
 	});
 }

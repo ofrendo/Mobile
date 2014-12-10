@@ -27,14 +27,14 @@ QUnit.test("User tests", function(assert) {
 	done = assert.async();
 	$.ajax({
 		type: "POST",
-		url: "/logout",
+		url: "/auth/logout",
 		complete: onAsyncComplete("User logout", done)
 	});
 	
 	done = assert.async();
 	$.ajax({
 		type: "POST",
-		url: "/login",
+		url: "/auth/login",
 		data: {
 			username: sampleUser.username,
 			password: sampleUser.password
@@ -75,7 +75,7 @@ QUnit.test("User tests", function(assert) {
 	done = assert.async();
 	$.ajax({
 		type: "POST",
-		url: "/logout",
+		url: "/auth/logout",
 		complete: onAsyncComplete("User logout", done)
 	});
 });
@@ -85,9 +85,9 @@ QUnit.test("User tests", function(assert) {
 
 
 
-var chatUser = {
-	username: "chat_user",
-	password: "chat"
+var testUser = {
+	username: "test_user",
+	password: "un1tt3st1ng"
 };
 
 QUnit.test("Chat tests", function(assert) {
@@ -102,10 +102,10 @@ QUnit.test("Chat tests", function(assert) {
 
 	$.ajax({
 		type: "POST",
-		url: "/login",
+		url: "/auth/login",
 		data: {
-			username: chatUser.username,
-			password: chatUser.password
+			username: testUser.username,
+			password: testUser.password
 		},
 		success: function(data, textStatus, jqXHR) {
 			var socket = io.connect({ 
@@ -128,11 +128,12 @@ QUnit.test("Chat tests", function(assert) {
 				doneRoomLeave();
 
 				socket.disconnect();
-				//Log out at the end
+
+				//Logout at the end
 				$.ajax({
 					type: "POST",
-					url: "/logout",
-					complete: onAsyncComplete("Chat user logout", doneLogout)
+					url: "/auth/logout",
+					complete: onAsyncComplete("Test user logout", doneLogout)
 				});
 			});
 
@@ -153,8 +154,95 @@ QUnit.test("Chat tests", function(assert) {
 			});
 
 		},
-		complete: onAsyncComplete("Chat user login", doneLogin)
+		complete: onAsyncComplete("Test user login", doneLogin)
 	});
+});
+
+var sampleTrip = {
+	name: "Test trip",
+	start_date: (new Date()).toISOString()
+};
+var updatedSampleTrip = JSON.parse(JSON.stringify(sampleTrip));
+updatedSampleTrip.name = "Updated test trip";
+
+QUnit.test("Trip tests", function(assert) {
+	assert.expect(11);
+
+	var done;
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/auth/login",
+		data: {
+			username: testUser.username,
+			password: testUser.password
+		},
+		success: function(data) {
+			testUser.user_id = data.user_id;
+		},
+		complete: onAsyncComplete("Test user login", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/trip",
+		data: {trip: sampleTrip},
+		success: function(data, textStatus, jqXHR) { //data will be trip_id
+			assert.ok(data.trip_id >= 0, "Created trip_id should be an integer: " + data.trip_id);
+			sampleTrip.trip_id = data.trip_id;
+			updatedSampleTrip.trip_id = data.trip_id;
+		},
+		complete: onAsyncComplete("Trip create", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/" + updatedSampleTrip.trip_id,
+		data: {trip: updatedSampleTrip},
+		success: function(data, textStatus, jqXHR) {
+			assert.ok(data.name == updatedSampleTrip.name, "trip.name should be updated");
+			sampleTrip.name = data.name;
+		},
+		complete: onAsyncComplete("Trip update", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "GET",
+		url: "/trip/" + sampleTrip.trip_id,
+		success: function(data, textStatus, jqXHR) {
+			var updated = sampleTrip.name == data.name;
+			assert.ok(updated, "GET should return the same data");
+		},
+		complete: onAsyncComplete("Trip get", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "GET",
+		url: "/user/" + testUser.user_id + "/trips",
+		success: function(data, textStatus, jqXHR) {
+			assert.ok(data.length >= 1, "Should return an array of trips")
+		},
+		complete: onAsyncComplete("Trip get all for user", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "DELETE",
+		url: "/trip/" + sampleTrip.trip_id,
+		complete: onAsyncComplete("Trip delete", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/auth/logout",
+		complete: onAsyncComplete("Test user logout", done)
+	});
+
 });
 
 var onAsyncComplete = function(text, done) {

@@ -85,7 +85,7 @@ POST /login
 //Sample usage:
 $.ajax({
 	type: "POST",
-	url: "/login",
+	url: "/auth/login",
 	data: {
 		username: sampleUser.username,
 		password: sampleUser.password
@@ -107,7 +107,7 @@ Status codes:
 
 #### Logout
 ```
-POST /logout
+POST /auth/logout
 ```
 
 Status codes:

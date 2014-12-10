@@ -15,7 +15,8 @@ CREATE TABLE users (
 
 INSERT INTO users 
 	(email,username,password,name)
-	VALUES ('chat_user@gmail.com', 'chat_user', crypt('chat', gen_salt('bf', 8)), 'Chat user');
+	VALUES ('test_user@gmail.com', 'test_user', crypt('un1tt3st1ng', gen_salt('bf', 8)), 'Test user');
+
 
 CREATE TABLE trip (
 	trip_id SERIAL PRIMARY KEY,

@@ -14,12 +14,24 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 	function doUpdate(object, callback) {
 		doQuery(getSqlUpdate(object), callback);
 	}
-	function doDelete(object_id, callback) {
-		doQuery(getSqlDelete(object_id), callback);
+	function doDelete(object_id, req, callback) {
+		doQuery(getSqlDelete(object_id, req), callback);
 	}
 
 	function doQuery(sql, callback) {
-		db.query(sql, callback);
+		if (sql instanceof Array) {
+			for (var i = 0; i < sql.length; i++) {
+
+				if (i !== sql.length-1) 
+					db.query(sql[i]);	
+				else 
+					db.query(sql[i], callback);
+				
+			}
+		}
+		else {
+			db.query(sql, callback);
+		}
 	}
 
 	//Creates an object in the database and sends back the ID it was created with
@@ -28,6 +40,7 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 			if (err) {
 				res.status(500).send(JSON.stringify({message: "Error during " + self.objectName + " creation."}));
 				console.log("Error during " + self.objectName + " creation:");
+				console.log(req.body[self.objectName]);
 				console.log(err);
 			}
 			else {
@@ -46,6 +59,13 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 	}
 	this.onRead = function(req, res) {
 		doRead(req.params[self.objectIDName], function(err, result) {
+			if (err) {
+				res.status(500).send(JSON.stringify({message: "Error during " + self.objectName + " get."}));
+				console.log("Error during " + self.objectName + " get:");
+				console.log(err);
+				return;
+			}
+
 			if (result.rows.length === 1) {
 				var object = result.rows[0];
 				
@@ -59,7 +79,7 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 		});
 	}
 	this.onUpdate = function(req, res) {
-		if (typeof(self.beforeSQLCheckUpdate == "function")) {
+		if (typeof(self.beforeSQLCheckUpdate) == "function") {
 			if (self.beforeSQLCheckUpdate(req, res, req.body[objectName]) == false) {
 				res.status(403).send({message: "Forbidden"});
 				return;
@@ -81,7 +101,7 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 		});
 	}
 	this.onDelete = function(req, res) {
-		doDelete(req.params[self.objectIDName], function(err, result) {
+		doDelete(req.params[self.objectIDName], req, function(err, result) {
 			if (err || result.rowCount !== 1) {
 				res.status(500).send(JSON.stringify({message: "Error during " + self.objectName + " delete."}));
 				console.log("Error during " + self.objectName + " delete:");
@@ -90,7 +110,7 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 			else {
 				if (result.rowCount === 1) {
 					console.log("Deleted " + self.objectName);
-					if (typeof(self.beforeSendDelete) == "function") self.beforeSendDelete(req, res); 
+					if (typeof(self.beforeSendDelete) == "function") self.beforeSendDelete(req, res, req.params[self.objectIDName]); 
 					res.status(200).end();
 				}
 			}

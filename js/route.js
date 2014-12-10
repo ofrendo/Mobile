@@ -49,14 +49,22 @@ router.routes = [
 
 	}),
 	//USER API CALLS
-	new Route("/login", "post", userMgt.onLogin),
-	new Route("/logout", "post", userMgt.onLogout),
+	new Route("/auth/login", "post", userMgt.onLogin),
+	new Route("/auth/logout", "post", userMgt.onLogout),
 	new Route("/user", "post", userMgt.crud.onCreate),
 	new Route("/user/*", "all", sessionMgt.onCheckSession),
 	new Route("/user/:user_id", "all", userMgt.crud.onAll),
 	new Route("/user/:user_id", "get", userMgt.crud.onRead),
 	new Route("/user/:user_id", "put", userMgt.crud.onUpdate),	
-	new Route("/user/:user_id", "delete", userMgt.crud.onDelete)
+	new Route("/user/:user_id", "delete", userMgt.crud.onDelete),
+	new Route("/user/:user_id/trips", "get", tripMgt.crud.onReadUserTrips),
+	new Route("/trip", "post", sessionMgt.onCheckSession),
+	new Route("/trip", "post", tripMgt.crud.onCreate),
+	new Route("/trip/*", "all", sessionMgt.onCheckSession),
+	new Route("/trip/:trip_id", "all", tripMgt.crud.onCertainTrip),
+	new Route("/trip/:trip_id", "get", tripMgt.crud.onRead),
+	new Route("/trip/:trip_id", "put", tripMgt.crud.onUpdate),
+	new Route("/trip/:trip_id", "delete", tripMgt.crud.onDelete)
 ];
 
 exports.router = router;
