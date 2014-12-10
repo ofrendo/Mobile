@@ -1,11 +1,65 @@
 # API Calls
 These are the API calls that can be made to the backend.
 
+## Session management
+#### Login
+```
+POST /auth/login
+
+Required: 
+username
+password
+
+Returns:
+user_id
+
+//Sample usage:
+$.ajax({
+	type: "POST",
+	url: "/auth/login",
+	data: {
+		username: sampleUser.username,
+		password: sampleUser.password
+	},
+	success: function(data, textStatus, jqXHR) {
+		//On login: data.user_id
+	},
+	error: function(jqXHR, textStatus, errorThrown) {
+		//On error, for example wrong password
+	}
+});
+```
+
+`data` in `success` returns a user JSON object like in `user/:user_id`.
+
+Status codes:
+- 200: OK
+- 400: Error during login
+
+#### Logout
+```
+POST /auth/logout
+```
+
+Status codes:
+- 200: Successful logout
+
+## Unit testing
+Open `/test` in a browser.
+
 ## User
 #### Creating a user
 ```
 POST /user
-Request body: JSON user object
+
+Required: 
+user.email
+user.username
+user.password
+user.name
+
+Returns:
+user_id
 
 //Sample usage:
 var sampleUser = {
@@ -17,7 +71,10 @@ var sampleUser = {
 $.ajax({
 	type: "POST",
 	url: "/user",
-	data: {user: sampleUser}
+	data: {user: sampleUser},
+	success: function(data, textStatus, jqXHR) {
+		sampleUser.user_id = data.user_id;
+	}
 });
 ```
 
@@ -32,13 +89,11 @@ Status codes:
 ```
 GET /user/:user_id
 
-Sample JSON result:
-{
-	"user_id":18,
-	"email":"hello@wor.ld",
-	"username":"helloWorld",
-	"name":"Hello World"
-}
+Returns:
+user_id
+email
+username
+name
 ```
 
 Status codes:
@@ -51,7 +106,18 @@ Status codes:
 #### Update user
 ```
 PUT /user/:user_id
-Request body: JSON user object
+
+Required:
+user.email
+user.username
+user.password
+user.name
+
+Returns:
+user_id
+email
+username
+name
 ```
 
 For sample usage see `POST /user`.
@@ -77,41 +143,80 @@ Status codes:
 - 403: Trying to delete a different user (different `user_id`)
 - 500: Internal server error trying to delete user
 
-## Session management
-#### Login
-```
-POST /login
-
-//Sample usage:
-$.ajax({
-	type: "POST",
-	url: "/auth/login",
-	data: {
-		username: sampleUser.username,
-		password: sampleUser.password
-	},
-	success: function(data, textStatus, jqXHR) {
-		//On login
-	},
-	error: function(jqXHR, textStatus, errorThrown) {
-		//On error, for example wrong password
-	}
-});
-```
-
-`data` in `success` returns a user JSON object like in `user/:user_id`.
+## Trip
+All calls described here require a user to be logged in.
 
 Status codes:
 - 200: OK
-- 400: Error during login
+- 400: Bad request, for example when sending a string instead of a number
+- 401: Not logged in
+- 403: Trying to read/update/delete a forbidden trip
+- 500: Internal server error
 
-#### Logout
+#### Create a trip
 ```
-POST /auth/logout
+POST /trip
+
+Required:
+trip.name
+
+Optional:
+trip.start_date (ISO 6801 format)
+trip.end_date (ISO 6801 format)
+
+Returns:
+trip_id
+
+//Sample usage:
+var sampleTrip = {
+	name: "Test trip",
+	start_date: (new Date()).toISOString()
+};
+$.ajax({
+	type: "POST",
+	url: "/trip",
+	data: {trip: sampleTrip},
+	success: function(data, textStatus, jqXHR) { //data will be trip_id
+		assert.ok(data.trip_id >= 0, "Created trip_id should be an integer: " + data.trip_id);
+		sampleTrip.trip_id = data.trip_id;
+		updatedSampleTrip.trip_id = data.trip_id;
+	},
+	complete: onAsyncComplete("Trip create", done)
+});
 ```
 
-Status codes:
-- 200: Successful logout
+#### Get trip data
+```
+GET /trip/:trip_id
 
-## Unit testing
-Open `/test` in a browser.
+Returns:
+trip_id
+name
+start_date
+end_date
+created_on
+```
+
+#### Update trip
+``` 
+PUT /trip/:trip_id
+
+Required:
+trip.name
+
+Optional:
+trip.start_date (ISO 6801 format)
+trip.end_date (ISO 6801 format)
+
+Returns:
+trip_id
+name
+start_date
+end_date
+created_on
+```
+
+#### Delete trip
+```
+DELETE /trip/:trip_id
+```

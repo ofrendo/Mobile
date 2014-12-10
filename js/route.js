@@ -61,7 +61,7 @@ router.routes = [
 	new Route("/trip", "post", sessionMgt.onCheckSession),
 	new Route("/trip", "post", tripMgt.crud.onCreate),
 	new Route("/trip/*", "all", sessionMgt.onCheckSession),
-	new Route("/trip/:trip_id", "all", tripMgt.crud.onCertainTrip),
+	new Route("/trip/:trip_id", "all", tripMgt.crud.onAll),
 	new Route("/trip/:trip_id", "get", tripMgt.crud.onRead),
 	new Route("/trip/:trip_id", "put", tripMgt.crud.onUpdate),
 	new Route("/trip/:trip_id", "delete", tripMgt.crud.onDelete)

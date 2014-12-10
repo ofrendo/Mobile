@@ -40,7 +40,13 @@ exports.crud.beforeSendCreate = function(req, res, trip) {
 	db.query(sql);
 }
 
-exports.crud.onCertainTrip = function(req, res, next) {
+exports.crud.onAll = function(req, res, next) {
+	var trip_id = req.params["trip_id"];
+	if (isNaN(trip_id)) {
+		res.status(400).end();
+		return;
+	}
+
 	//Check if user is allowed to read/update/delete trip
 	var sql = {
 		text: "SELECT * FROM user_trip WHERE user_id=$1 AND trip_id=$2",
