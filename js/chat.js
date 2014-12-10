@@ -5,10 +5,7 @@ var sessionMgt = require("./sessionMgt");
 
 exports.start = function(io) {
 	console.log("Started chat...");
-	//io.on("connection", onConnect);
-	io.on("connection", function() {
-		console.log("Client connected to WS.");
-	});
+	io.on("connection", onConnect);
 }
 
 var currentRooms = [];
@@ -16,7 +13,7 @@ var onConnect = function(socket) {
 	//socket.user needs to be the session: Get that from the cookie
 	var cookie = socket.client.request.headers.cookie;
 	sessionMgt.getSessionFromCookie(cookie, function(session) {
-		if (!session) {
+		if (!session || !session.user) {
 			socket.disconnect();
 		}
 		else {
