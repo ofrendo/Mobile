@@ -1,7 +1,8 @@
 var express = require("express");
 var session = require("express-session");
-var sessionMgt = require("./sessionMgt");
 var bodyParser = require("body-parser");
+var cors = require("cors");
+var sessionMgt = require("./sessionMgt");
 var router = require("./route");
 var chat = require("./chat");
 
@@ -20,6 +21,7 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cors());
 
 console.log("Starting server...");
 for (var i = 0; i < router.routes.length; i++) {
