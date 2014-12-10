@@ -59,7 +59,7 @@ https://github.com/ofrendo/Mobile-fe
 https://www.fluidui.com/editor/live/preview/p_zW5eZMINKgiua1atXO9TQJ4MfGmnfQoR.1416922721797
 
 ## Git Guide
-https://github.com/ofrendo/Mobile/docs/GIT.md
+https://github.com/ofrendo/Mobile/blob/master/docs/GIT.md
 
 ## API Calls
-https://github.com/ofrendo/Mobile/docs/API.md
+https://github.com/ofrendo/Mobile/blob/master/docs/API.md
