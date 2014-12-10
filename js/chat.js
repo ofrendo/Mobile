@@ -1,5 +1,6 @@
 var db = require("./db");
 var userMgt = require("./userMgt");
+var tripMgt = require("./tripMgt");
 var sessionMgt = require("./sessionMgt");
 
 exports.start = function(io) {
@@ -25,23 +26,47 @@ var onConnect = function(socket) {
 		var trip_id = data.trip_id;
 		var user = socket.user;
 
-		//Check if user is allowed to join this room, if not disconnect ::TODO::
+		//Check if user is allowed to join this room, if not disconnect
+		tripMgt.isUserAllowed(user.user_id, trip_id, function(result) {
+			if (result === false) {
+				socket.disconnect();
+			}
+			else {
 
-		if (!currentRooms[trip_id]) 
-			currentRooms[trip_id] = [];
+				var sql = {
+					text: "SELECT message.user_id, username, name, trip_id, msg_id, msg_text, created_on FROM users, message" +
+						  " WHERE message.trip_id=$1 " +
+						  "   AND users.user_id = message.user_id" +
+						  " ORDER BY created_on" +
+						  " LIMIT 100",
+					values: [trip_id]
+				};
+				db.query(sql, function(err, result) {
+					if (err) {
+						console.log("Error retrieving previous chat messages:");
+						console.log(err);
+						socket.disconnect();
+					}
+					else {
+						if (!currentRooms[trip_id]) 
+							currentRooms[trip_id] = [];
 
-		currentRooms[trip_id].push(user);
+						currentRooms[trip_id].push(user);
 
-		socket.room = "room" + trip_id;
-		socket.trip_id = trip_id;
+						socket.room = "room" + trip_id;
+						socket.trip_id = trip_id;
 
-		socket.join(socket.room);
+						socket.join(socket.room);
 
-		//Load previous messages from DB ::TODO::
-		socket.emit("room.previousMessages", []); //TODO
 
-		socket.broadcast.to(socket.room).emit("room.userJoined", user);
-		console.log("User " + user.username + " has joined room for trip " + trip_id);
+						socket.emit("room.previousMessages", result.rows); //TODO
+
+						socket.broadcast.to(socket.room).emit("room.userJoined", user);
+						console.log("User " + user.username + " has joined room for trip " + trip_id);
+					}
+				})
+			}
+		});
 	});
 
 	socket.on("msg.send", function(data) { //data needs to include msg_text
@@ -57,13 +82,25 @@ var onConnect = function(socket) {
 			trip_id: socket.trip_id,
 			msg_text: data.msg_text
 		};
-		//Enter into DB table ::TODO::
-		message.msg_id = 1; //TODO
 		
-		socket.broadcast.to(socket.room).emit("msg.new", message);
-		socket.emit("msg.sent", message);
+		var sql = {
+			text: "INSERT INTO message (user_id, trip_id, msg_text) VALUES ($1, $2, $3) RETURNING msg_id",
+			values: [user.user_id, socket.trip_id, message.msg_text]
+		};
+		db.query(sql, function(err, result) {
+			if (err) {
+				console.log("Error inserting chat message into DB:");
+				console.log(err);
+				socket.disconnect();
+			}
+			else {
+				message.msg_id = result.rows[0].msg_id;
+				socket.broadcast.to(socket.room).emit("msg.new", message);
+				socket.emit("msg.sent", message);
 
-		console.log("User " + user.username + " has sent a message: " + message.msg_text);
+				console.log("User " + user.username + " has sent a message: " + message.msg_text + " in room: " + socket.room);
+			}
+		});
 	});
 
 	socket.on("room.leave", function() {

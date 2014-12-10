@@ -48,29 +48,39 @@ exports.crud.onAll = function(req, res, next) {
 	}
 
 	//Check if user is allowed to read/update/delete trip
+	exports.isUserAllowed(req.session.user.user_id, req.params["trip_id"], function(result, status) {
+		if (result === false) {
+			res.status(status).end();
+		}
+		else {
+			next();
+		}
+	})
+};
+
+exports.isUserAllowed = function(user_id, trip_id, callback) {
 	var sql = {
 		text: "SELECT * FROM user_trip WHERE user_id=$1 AND trip_id=$2",
-		values: [req.session.user.user_id, req.params["trip_id"]]
+		values: [user_id, trip_id]
 	}
 	db.query(sql, function(err, result) {
 		if (err) {
 			console.log("Error operating on certain trip:");
 			console.log(err);
-			res.status(500).end();
+			callback(false, 500);
 		}
 		else {
 			if (result.rows.length === 1) {
-				next();	
+				callback(true);
 			}
 			else {
 				console.log("User tried to retrieve forbidden trip:");
 				console.log(sql.values);
-				res.status(403).end();
-			}	
+				callback(false, 403);
+			}
 		}
-	})
-	
-};
+	});
+}
 
 exports.crud.onReadUserTrips = function(req, res) {
 	var sql = {

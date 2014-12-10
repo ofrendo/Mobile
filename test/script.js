@@ -113,14 +113,22 @@ QUnit.test("Chat tests", function(assert) {
 			});
 
 			socket.on("room.previousMessages", function(previousMessages) {
-				console.log("Chat room joined");
-				assert.ok(true, "Chat room joined");
+				console.log("Chat room joined with previousMessages:");
+				console.log(previousMessages);
+				assert.ok(previousMessages instanceof Array, "Chat room joined");
 				doneRoomJoin();
+
+				//Send a message
+				var message = {msg_text: "Unit testing chat."};
+				socket.emit("msg.send", message);
 			});
 			socket.on("msg.sent", function() {
 				console.log("Chat message sent and recieved");
 				assert.ok(true, "Chat message sent and recieved");
 				doneMessageSent();
+				
+				//Leave the room and disconnect
+				socket.emit("room.leave");
 			});
 			socket.on("room.left", function() {
 				console.log("Chat room left");
@@ -144,13 +152,6 @@ QUnit.test("Chat tests", function(assert) {
 				//Join a room
 				var testRoom = {trip_id: 1};
 				socket.emit("room.join", testRoom);
-
-				//Send a message
-				var message = {msg_text: "Unit testing chat."};
-				socket.emit("msg.send", message);
-
-				//Leave the room and disconnect
-				socket.emit("room.leave");
 			});
 
 		},

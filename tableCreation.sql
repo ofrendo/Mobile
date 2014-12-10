@@ -26,10 +26,19 @@ CREATE TABLE trip (
 	end_date TIMESTAMP
 ); 
 
+INSERT INTO trip 
+	(name)
+	VALUES ('test_trip');
+	
+
 CREATE TABLE user_trip (
 	user_id INT REFERENCES users(user_id),
 	trip_id INT REFERENCES trip(trip_id)
 );
+
+INSERT INTO user_trip 
+	(user_id, trip_id)
+	VALUES (1, 1);
 
 CREATE TABLE destination (
 	destination_id SERIAL PRIMARY KEY,
