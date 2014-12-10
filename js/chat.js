@@ -5,7 +5,10 @@ var sessionMgt = require("./sessionMgt");
 
 exports.start = function(io) {
 	console.log("Started chat...");
-	io.on("connection", onConnect);
+	//io.on("connection", onConnect);
+	io.on("connection", function() {
+		console.log("Client connected to WS.");
+	});
 }
 
 var currentRooms = [];
