@@ -1,9 +1,8 @@
-var cookieParser = require("cookie-parser");
 var db = require("./db");
 var userMgt = require("./userMgt");
 var sessionMgt = require("./sessionMgt");
 
-exports.start = function(io, cookieParser) {
+exports.start = function(io) {
 	console.log("Started chat...");
 	io.on("connection", onConnect);
 }
