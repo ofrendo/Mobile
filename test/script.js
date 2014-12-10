@@ -135,7 +135,7 @@ QUnit.test("Chat tests", function(assert) {
 				assert.ok(true, "Chat room left");
 				doneRoomLeave();
 
-				socket.disconnect();
+				//socket.disconnect();
 
 				//Logout at the end
 				$.ajax({
