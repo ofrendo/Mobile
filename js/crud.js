@@ -36,6 +36,13 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 
 	//Creates an object in the database and sends back the ID it was created with
 	this.onCreate = function(req, res) {
+		if (typeof(self.beforeSQLCheckCreate) == "function") {
+			if (self.beforeSQLCheckCreate(req, res, req.body[objectName]) == false) {
+				res.status(400).end();
+				return;
+			}
+		}
+
 		doCreate(req.body[self.objectName], function(err, result) {
 			if (err) {
 				res.status(500).send(JSON.stringify({message: "Error during " + self.objectName + " creation."}));

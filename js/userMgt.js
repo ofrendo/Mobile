@@ -1,3 +1,5 @@
+var emailValidator = require("email-validator");
+
 var db = require("./db");
 var crud = require("./crud");
 var sessionMgt = require("./sessionMgt");
@@ -31,6 +33,10 @@ exports.crud = new crud.CRUDModule("user",
 		};
 	}
 );
+
+exports.crud.beforeSQLCheckCreate = function(req, res, user) {
+	return emailValidator.validate(user.email);
+}
 
 exports.crud.beforeSendCreate = function(req, res, user) {
 	sessionMgt.setUser(req, user);
