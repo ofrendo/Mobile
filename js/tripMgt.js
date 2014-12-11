@@ -16,8 +16,10 @@ exports.crud = new crud.CRUDModule("trip",
 	},
 	function(trip) {
 		return {
-			text: "UPDATE trip SET name=$1, start_date=$2, end_date=$3 RETURNING trip_id, name, created_on, start_date, end_date",
-			values: [trip.name, trip.start_date, trip.end_date]
+			text: "UPDATE trip SET name=$1, start_date=$2, end_date=$3 " +
+				  " WHERE trip_id=$4" +
+				  " RETURNING trip_id, name, created_on, start_date, end_date",
+			values: [trip.name, trip.start_date, trip.end_date, trip.trip_id]
 		};
 	},
 	function(trip_id, req) {
