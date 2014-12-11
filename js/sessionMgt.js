@@ -38,10 +38,14 @@ exports.setUser = function(req, user) {
 }
 
 exports.onCheckSession = function(req, res, next) {
+	//console.log("----REQ HEADERS----");
+	//console.log(req.);
 	if (exports.isLoggedIn(req)) {
 		next();			
 	}	
 	else {
+		//console.log("User not logged in:");
+		//console.log(req.session);
 		res.status(401).send(JSON.stringify({message: "Not logged in."}));
 	}
 }
