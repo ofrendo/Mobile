@@ -1,7 +1,8 @@
-var userMgt = require("./userMgt");
+var userMgt = require("./crud/userMgt");
+var tripMgt = require("./crud/tripMgt");
+var cityMgt = require("./crud/cityMgt");
+var locationMgt = require("./crud/locationMgt");
 var sessionMgt = require("./sessionMgt");
-var tripMgt = require("./tripMgt");
-
 /*
 path: path with which to make an API call
 method: get, post, put, delete
@@ -64,7 +65,17 @@ router.routes = [
 	new Route("/trip/:trip_id", "all", tripMgt.crud.onAll),
 	new Route("/trip/:trip_id", "get", tripMgt.crud.onRead),
 	new Route("/trip/:trip_id", "put", tripMgt.crud.onUpdate),
-	new Route("/trip/:trip_id", "delete", tripMgt.crud.onDelete)
+	new Route("/trip/:trip_id", "delete", tripMgt.crud.onDelete),
+	new Route("/trip/:trip_id/city", "post", cityMgt.crud.onCreate),
+	new Route("/trip/:trip_id/city/:city_id", "all", cityMgt.crud.onAll),
+	new Route("/trip/:trip_id/city/:city_id", "get", cityMgt.crud.onRead),
+	new Route("/trip/:trip_id/city/:city_id", "put", cityMgt.crud.onUpdate),
+	new Route("/trip/:trip_id/city/:city_id", "delete", cityMgt.crud.onDelete),
+	new Route("/trip/:trip_id/city/:city_id/location", "post", locationMgt.crud.onCreate),
+	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "all", locationMgt.crud.onAll),
+	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "get", locationMgt.crud.onRead),
+	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "put", locationMgt.crud.onUpdate),
+	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "delete", locationMgt.crud.onDelete)
 ];
 
 exports.router = router;

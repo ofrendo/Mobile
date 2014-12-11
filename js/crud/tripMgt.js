@@ -1,4 +1,4 @@
-var db = require("./db");
+var db = require(".././db");
 var crud = require("./crud");
 
 exports.crud = new crud.CRUDModule("trip",
@@ -43,14 +43,14 @@ exports.crud.beforeSendCreate = function(req, res, trip) {
 }
 
 exports.crud.onAll = function(req, res, next) {
-	var trip_id = req.params["trip_id"];
+	var trip_id = req.params.trip_id;
 	if (isNaN(trip_id)) {
 		res.status(400).end();
 		return;
 	}
 
 	//Check if user is allowed to read/update/delete trip
-	exports.isUserAllowed(req.session.user.user_id, req.params["trip_id"], function(result, status) {
+	exports.isUserAllowed(req.session.user.user_id, trip_id, function(result, status) {
 		if (result === false) {
 			res.status(status).end();
 		}

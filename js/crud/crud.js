@@ -1,4 +1,4 @@
-var db = require("./db");
+var db = require(".././db");
 
 exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate, getSqlDelete) {
 	var self = this;

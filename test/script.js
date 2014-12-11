@@ -246,6 +246,171 @@ QUnit.test("Trip tests", function(assert) {
 
 });
 
+var sampleCity = {
+	trip_id: 1,
+	name: "Unit test city",
+	place_id: -1, 
+	longitude: -1, 
+	latitude: -1, 
+	start_date: (new Date()).toISOString(),
+	end_date: (new Date()).toISOString(),
+	ranking: 1
+};
+var updatedSampleCity = JSON.parse(JSON.stringify(sampleCity));
+updatedSampleCity.name = "Updated unit test city";
+
+QUnit.test("City tests", function(assert) {
+	assert.expect(9);
+
+	var done;
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/auth/login",
+		data: {
+			username: testUser.username,
+			password: testUser.password
+		},
+		success: function(data) {
+			testUser.user_id = data.user_id;
+		},
+		complete: onAsyncComplete("Test user login", done)
+	});
+
+	//Use test trip with id=1 as parent
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/trip/1/city",
+		data: {city: sampleCity},
+		success: function(data) {
+			assert.ok(data.city_id >= 0, "city_id should be an integer");
+			sampleCity.city_id = data.city_id;
+			updatedSampleCity.city_id = data.city_id;
+		},
+		complete: onAsyncComplete("Create city", done)
+	});
+
+	var done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/1/city/" + updatedSampleCity.city_id,
+		data: {city: updatedSampleCity},
+		success: function(data, textStatus, jqXHR) {
+			assert.ok(data.name == updatedSampleCity.name, "city.name should be updated");
+			sampleCity.name = data.name;
+		},
+		complete: onAsyncComplete("City update", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "GET",
+		url: "/trip/1/city/" + sampleCity.city_id,
+		success: function(data, textStatus, jqXHR) {
+			assert.ok(data.city_id == sampleCity.city_id, "Should return the correct city")
+		},
+		complete: onAsyncComplete("City get", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "DELETE",
+		url: "/trip/1/city/" + sampleCity.city_id,
+		complete: onAsyncComplete("City delete", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/auth/logout",
+		complete: onAsyncComplete("Test user logout", done)
+	});
+});
+
+var sampleLocation = {
+	city_id: 1,
+	name: "Unit test location", 
+	place_id: -1,
+	category: -1,
+	longitude: -1,
+	latitude: -1,
+	start_date: (new Date().toISOString()),
+	end_date: (new Date().toISOString()),
+	ranking: 1
+};
+var updatedSampleLocation = JSON.parse(JSON.stringify(sampleLocation));
+updatedSampleLocation.name = "Updated unit test location";
+
+QUnit.test("Location tests", function(assert) {
+	assert.expect(9);
+
+	var done;
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/auth/login",
+		data: {
+			username: testUser.username,
+			password: testUser.password
+		},
+		success: function(data) {
+			testUser.user_id = data.user_id;
+		},
+		complete: onAsyncComplete("Test user login", done)
+	});
+
+	//Use test trip with id=1 as parent
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/trip/1/city/1/location",
+		data: {location: sampleLocation},
+		success: function(data) {
+			assert.ok(data.location_id >= 0, "location_id should be an integer");
+			sampleLocation.location_id = data.location_id;
+			updatedSampleLocation.location_id = data.location_id;
+		},
+		complete: onAsyncComplete("Create location", done)
+	});
+
+	var done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/1/city/1/location/" + updatedSampleLocation.location_id,
+		data: {location: updatedSampleLocation},
+		success: function(data, textStatus, jqXHR) {
+			assert.ok(data.name == updatedSampleLocation.name, "location.name should be updated");
+			sampleLocation.name = data.name;
+		},
+		complete: onAsyncComplete("Location update", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "GET",
+		url: "/trip/1/city/1/location/" + sampleLocation.location_id,
+		success: function(data, textStatus, jqXHR) {
+			assert.ok(data.location_id == sampleLocation.location_id, "Should return the correct location")
+		},
+		complete: onAsyncComplete("Location get", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "DELETE",
+		url: "/trip/1/city/1/location/" + sampleLocation.location_id,
+		complete: onAsyncComplete("Location delete", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/auth/logout",
+		complete: onAsyncComplete("Test user logout", done)
+	});
+});
+
 var onAsyncComplete = function(text, done) {
     return function(jqXHR, textStatus) {
     	console.log("Ran: " + text);

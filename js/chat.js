@@ -1,6 +1,6 @@
 var db = require("./db");
-var userMgt = require("./userMgt");
-var tripMgt = require("./tripMgt");
+var userMgt = require("./crud/userMgt");
+var tripMgt = require("./crud/tripMgt");
 var sessionMgt = require("./sessionMgt");
 
 exports.start = function(io) {

@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS message;
 DROP TABLE IF EXISTS location;
-DROP TABLE IF EXISTS destination;
+DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS user_trip;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS trip;
@@ -40,8 +40,8 @@ INSERT INTO user_trip
 	(user_id, trip_id)
 	VALUES (1, 1);
 
-CREATE TABLE destination (
-	destination_id SERIAL PRIMARY KEY,
+CREATE TABLE city (
+	city_id SERIAL PRIMARY KEY,
 	trip_id  INT REFERENCES trip(trip_id),
 	name VARCHAR(50) NOT NULL,
 	place_id VARCHAR(27),
@@ -53,9 +53,13 @@ CREATE TABLE destination (
 	ranking INT
 );
 
+INSERT INTO city
+	(trip_id, name, place_id, longitude, latitude, ranking)
+	VALUES (1, 'test_city', 1234, -1, -1, -1);
+
 CREATE TABLE location (
 	location_id SERIAL PRIMARY KEY,
-	destination_id INT REFERENCES destination(destination_id),
+	city_id INT REFERENCES city(city_id),
 	name VARCHAR(50) NOT NULL,
 	place_id VARCHAR(27),
 	category VARCHAR(50),

@@ -1,8 +1,6 @@
 var express = require("express");
 var session = require("express-session");
 var bodyParser = require("body-parser");
-var csrf = require("csurf");
-var cors = require("cors");
 var sessionMgt = require("./sessionMgt");
 var router = require("./route");
 var chat = require("./chat");
@@ -27,10 +25,6 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-//app.use(cors());
-/*app.use(csrf({
-	ignoreMethods: ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"]
-}));*/
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.headers.origin);
