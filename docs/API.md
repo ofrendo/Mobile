@@ -380,3 +380,93 @@ ranking
 ```
 DELETE /trip/:trip_id/city/:city_id/location/:location_id
 ```
+
+
+
+## WebSocket chat
+The library `socket.io` is used for the WebSocket connection. The chat is room based, which means each trip has its own room. A user can only join one room at a time. In order to connect:
+```
+var url = "https://thawing-stream-4939.herokuapp.com:443"; //can also use http://localhost:5000 if using the local server
+var socket = io.connect(url);
+```
+
+
+#### Message structure
+Each message has the following structure:
+```
+message.user_id
+message.username
+message.name
+message.trip_id
+message.msg_id
+message.msg_text
+message.created_on
+```
+
+
+
+#### Emitting events
+These are the events that the client can emit to the server.
+```
+//Call this to join a room for a given trip_id
+//The response is room.previousMessages
+socket.emit("room.join", {trip_id: trip.trip_id});
+
+
+//Call this to leave the current room
+//The response is room.left
+socket.emit("room.leave");
+
+
+//Call this to send a message to other participants
+//The response is msg.sent
+socket.emit("msg.send", {msg_text: text});
+```
+
+
+
+#### Reacting to events
+These are the events that the server will emit to the client. 
+
+```
+//This event will be emitted upon connecting (not joining a room)
+socket.on("connect", function() {
+	
+});
+
+//This event will be emitted upon disconnecting
+socket.on("disconnect", function() {
+	
+});
+
+//This event will be emitted upon joining a room
+socket.on("room.previousMessages", function(previousMessages) {
+	//previousMessages is an array of previous messages in a room for a given trip
+});
+
+//This event will be emitted if another user joins a room
+socket.on("room.userJoined", function(user) {
+	//user.user_id, user.username, user.name are available
+});
+
+//This event will be emitted if the user leaves the current room
+socket.on("room.left", function() {
+	
+});
+
+//This event will be emitted if another user leaves the current room
+socket.on("room.userLeft", function(user) {
+	//user.user_id, user.username, user.name are available to be used
+});
+
+//This event will be emitted upon sending a message
+socket.on("msg.sent", function(message) {
+	//message has the full message structure, such as the msg_id
+});
+
+//This event will be emitted if a different user sends  amessage
+socket.on("msg.new", function(message) {
+	//message has the full message structure (see above)
+});
+```
+

@@ -78,13 +78,15 @@ var onConnect = function(socket) {
 
 		var user = socket.user;
 		var message = {
-			user: user,
+			user_id: user.user_id,
+			username: user.username,
+			name: user.name,
 			trip_id: socket.trip_id,
 			msg_text: data.msg_text
 		};
 		
 		var sql = {
-			text: "INSERT INTO message (user_id, trip_id, msg_text) VALUES ($1, $2, $3) RETURNING msg_id",
+			text: "INSERT INTO message (user_id, trip_id, msg_text) VALUES ($1, $2, $3) RETURNING msg_id, created_on",
 			values: [user.user_id, socket.trip_id, message.msg_text]
 		};
 		db.query(sql, function(err, result) {
@@ -95,6 +97,7 @@ var onConnect = function(socket) {
 			}
 			else {
 				message.msg_id = result.rows[0].msg_id;
+				message.created_on = result.rows[0].created_on;
 				socket.broadcast.to(socket.room).emit("msg.new", message);
 				socket.emit("msg.sent", message);
 
