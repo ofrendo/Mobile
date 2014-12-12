@@ -386,7 +386,8 @@ DELETE /trip/:trip_id/city/:city_id/location/:location_id
 ## WebSocket chat
 The library `socket.io` is used for the WebSocket connection. The chat is room based, which means each trip has its own room. A user can only join one room at a time. In order to connect:
 ```
-var url = "https://thawing-stream-4939.herokuapp.com:443"; //can also use http://localhost:5000 if using the local server
+//Can also use http://localhost:5000 if using the local server
+var url = "https://thawing-stream-4939.herokuapp.com:443"; 
 var socket = io.connect(url);
 ```
 
