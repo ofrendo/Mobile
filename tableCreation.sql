@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS message;
 DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS city;
 DROP TABLE IF EXISTS user_trip;
-DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS trip;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
@@ -20,6 +20,7 @@ INSERT INTO users
 
 CREATE TABLE trip (
 	trip_id SERIAL PRIMARY KEY,
+	created_by INT REFERENCES users(user_id),
 	name VARCHAR(50) NOT NULL,
 	created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
 	start_date TIMESTAMP, 
@@ -27,8 +28,8 @@ CREATE TABLE trip (
 ); 
 
 INSERT INTO trip 
-	(name)
-	VALUES ('test_trip');
+	(name, created_by)
+	VALUES ('test_trip', 1);
 	
 
 CREATE TABLE user_trip (

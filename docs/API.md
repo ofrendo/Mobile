@@ -104,6 +104,22 @@ Status codes:
 - 403: Forbidden, trying to access info about other user
 - 404: Not found
 
+
+### Get user trips
+```
+GET /user/:user_id/trips
+
+Returns (array):
+trip_id
+created_by
+name
+start_date
+end_date
+created_on
+no_participants
+no_cities
+```
+
 #### Update user
 ```
 PUT /user/:user_id
@@ -189,6 +205,7 @@ GET /trip/:trip_id
 
 Returns:
 trip_id
+created_by
 name
 start_date
 end_date

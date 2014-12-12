@@ -5,8 +5,8 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 	this.objectName = objectName;
 	this.objectIDName = objectName + "_id";
 
-	function doCreate(object, callback) {
-		doQuery(getSqlCreate(object), callback);
+	function doCreate(object, req, callback) {
+		doQuery(getSqlCreate(object, req), callback);
 	}	
 	function doRead(object_id, callback) {
 		doQuery(getSqlRead(object_id), callback);
@@ -43,7 +43,7 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 			}
 		}
 
-		doCreate(req.body[self.objectName], function(err, result) {
+		doCreate(req.body[self.objectName], req, function(err, result) {
 			if (err) {
 				res.status(500).send(JSON.stringify({message: "Error during " + self.objectName + " creation."}));
 				console.log("Error during " + self.objectName + " creation:");
