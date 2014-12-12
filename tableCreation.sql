@@ -30,6 +30,9 @@ CREATE TABLE trip (
 INSERT INTO trip 
 	(name, created_by)
 	VALUES ('test_trip', 1);
+INSERT INTO trip 
+	(name, created_by, start_date, end_date)
+	VALUES ('Amerika - Testreise', 1, '2014-12-10T00:00:00.000Z', '2014-12-25T00:00:00.000Z');	
 	
 
 CREATE TABLE user_trip (
@@ -40,6 +43,10 @@ CREATE TABLE user_trip (
 INSERT INTO user_trip 
 	(user_id, trip_id)
 	VALUES (1, 1);
+INSERT INTO user_trip 
+	(user_id, trip_id)
+	VALUES (1, 2);
+
 
 CREATE TABLE city (
 	city_id SERIAL PRIMARY KEY,
