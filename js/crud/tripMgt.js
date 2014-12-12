@@ -5,7 +5,7 @@ exports.crud = new crud.CRUDModule("trip",
 	function(trip, req) {
 		return {
 			text: "INSERT INTO trip (name, created_by, start_date, end_date) VALUES ($1, $2, $3, $4) RETURNING trip_id",
-			values: [trip.name, req.session.user.user_id, start_date, trip.end_date]
+			values: [trip.name, req.session.user.user_id, trip.start_date, trip.end_date]
 		};
 	},
 	function(trip_id) {
