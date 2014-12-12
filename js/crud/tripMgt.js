@@ -86,9 +86,12 @@ exports.isUserAllowed = function(user_id, trip_id, callback) {
 
 exports.crud.onReadUserTrips = function(req, res) {
 	var sql = {
-		text: "SELECT * FROM user_trip, trip" + 
-			  " WHERE user_trip.user_id=$1" + 
-			  "   AND user_trip.trip_id = trip.trip_id",
+		text: "SELECT *, " +
+			  "  (SELECT COUNT(*) FROM user_trip WHERE user_trip.trip_id = trip.trip_id) AS no_participants, " +
+			  "  (SELECT COUNT(*) FROM city where city.trip_id = trip.trip_id) AS no_cities " + 	
+			  "    FROM user_trip, trip " +
+			  "    WHERE user_trip.user_id=$1 " +
+			  "      AND user_trip.trip_id = trip.trip_id; ",
 		values: [req.session.user.user_id] 
 	};
 	db.query(sql, function(err, result) {
