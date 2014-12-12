@@ -112,6 +112,7 @@ GET /user/:user_id/trips
 Returns (array):
 trip_id
 created_by
+user_id (ID of the currently logged in user, could be compared with created_by)
 name
 start_date
 end_date
