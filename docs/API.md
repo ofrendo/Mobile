@@ -149,9 +149,9 @@ All calls described here require a user to be logged in.
 
 Status codes:
 - 200: OK
-- 400: Bad request, for example when sending a string instead of a number
+- 400: Bad request, for example when sending a string instead of a number as IDs
 - 401: Not logged in
-- 403: Trying to read/update/delete a forbidden trip
+- 403: Trying to read/update/delete a forbidden trip, for example trying to read from another user
 - 500: Internal server error
 
 #### Create a trip
@@ -178,11 +178,8 @@ $.ajax({
 	url: "/trip",
 	data: {trip: sampleTrip},
 	success: function(data, textStatus, jqXHR) { //data will be trip_id
-		assert.ok(data.trip_id >= 0, "Created trip_id should be an integer: " + data.trip_id);
 		sampleTrip.trip_id = data.trip_id;
-		updatedSampleTrip.trip_id = data.trip_id;
-	},
-	complete: onAsyncComplete("Trip create", done)
+	}
 });
 ```
 
@@ -220,4 +217,166 @@ created_on
 #### Delete trip
 ```
 DELETE /trip/:trip_id
+```
+
+## City
+All calls described here require a user to be logged in.
+
+Status codes:
+- 200: OK
+- 400: Bad request, for example when sending a string instead of a number as IDs
+- 401: Not logged in
+- 403: Trying to read/update/delete a forbidden trip, for example trying to read from another user
+- 500: Internal server error
+
+#### Create city
+```
+POST /trip/:trip_id/city
+
+Required: 
+city.trip_id
+city.name
+city.place_id
+city.longitude
+city.latitude
+city.ranking
+
+Optional:
+city.start_date
+city.end_date
+
+Returns:
+city_id
+```
+
+#### Get city
+```
+GET /trip/:trip_id/city/:city_id
+
+Returns:
+city_id
+trip_id
+name
+place_id
+longitude
+latitude
+start_date
+end_date
+ranking
+```
+
+#### Update city
+```
+PUT /trip/:trip_id/city/:city_id
+
+Required: 
+city.trip_id
+city.name
+city.place_id
+city.longitude
+city.latitude
+city.ranking
+
+Optional:
+city.start_date
+city.end_date
+
+Returns:
+city_id
+trip_id
+name
+place_id
+longitude
+latitude
+start_date
+end_date
+ranking
+```
+
+#### Delete city
+```
+DELETE /trip/:trip_id/city/:city_id
+```
+
+## Location
+All calls described here require a user to be logged in.
+
+Status codes:
+- 200: OK
+- 400: Bad request, for example when sending a string instead of a number as IDs
+- 401: Not logged in
+- 403: Trying to read/update/delete a forbidden trip, for example trying to read from another user
+- 500: Internal server error
+
+#### Create location
+```
+POST /trip/:trip_id/city/:city_id/location
+
+Required:
+location.city_id
+location.name
+location.place_id
+location.category
+location.longitude
+location.latitude
+location.ranking
+
+Optional:
+location.start_date
+location.end_date
+
+Returns:
+location_id
+```
+
+#### Get location
+```
+GET /trip/:trip_id/city/:city_id/location/:location_id
+
+Returns:
+location_id
+city_id
+name
+place_id
+category
+longitude
+latitude
+start_date
+end_date
+ranking
+```
+
+#### Update location
+```
+PUT /trip/:trip_id/city/:city_id/location/:location_id
+
+Required:
+location.city_id
+location.name
+location.place_id
+location.category
+location.longitude
+location.latitude
+location.ranking
+
+Optional:
+location.start_date
+location.end_date
+
+Returns:
+location_id
+city_id
+name
+place_id
+category
+longitude
+latitude
+start_date
+end_date
+ranking
+```
+
+#### Delete location
+```
+DELETE /trip/:trip_id/city/:city_id/location/:location_id
 ```
