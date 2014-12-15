@@ -23,6 +23,7 @@ var onConnect = function(socket) {
 		else {
 			console.log("User had a valid session.");
 			socket.user = session.user;
+			socket.user.emailMD5 = md5(socket.user.email);
 			delete socket.user["email"];
 		}
 	});
@@ -69,7 +70,7 @@ var onConnect = function(socket) {
 						socket.join(socket.room);
 
 						for (var i = 0; i < result.rows.length; i++) {
-							setAvatar(result.rows[i], result.rows[i].email);
+							setAvatar(result.rows[i], md5(result.rows[i].email));
 							delete result.rows[i]["email"];
 						}
 
@@ -98,7 +99,7 @@ var onConnect = function(socket) {
 			trip_id: socket.trip_id,
 			msg_text: data.msg_text
 		};
-		setAvatar(message, user.email);
+		setAvatar(message, socket.user.emailMD5);
 		
 		var sql = {
 			text: "INSERT INTO message (user_id, trip_id, msg_text) VALUES ($1, $2, $3) RETURNING msg_id, created_on",
@@ -149,6 +150,6 @@ function leaveRoom(socket) {
 	}
 }
 
-function setAvatar(message, email) {
-	message.avatar = "http://www.gravatar.com/avatar/" + md5(email) + "?d=identicon";
+function setAvatar(message, emailMD5) {
+	message.avatar = "http://www.gravatar.com/avatar/" + emailMD5 + "?d=identicon";
 }
