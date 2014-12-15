@@ -2,6 +2,8 @@ var db = require("./db");
 var userMgt = require("./crud/userMgt");
 var tripMgt = require("./crud/tripMgt");
 var sessionMgt = require("./sessionMgt");
+var md5 = require("blueimp-md5").md5;
+
 
 exports.start = function(io) {
 	console.log("Started chat...");
@@ -36,7 +38,7 @@ var onConnect = function(socket) {
 			}
 			else {
 				var sql = {
-					text: "SELECT message.user_id, username, name, trip_id, msg_id, msg_text, created_on FROM users, message" +
+					text: "SELECT message.user_id, username, name, email, trip_id, msg_id, msg_text, created_on FROM users, message" +
 						  " WHERE message.trip_id=$1 " +
 						  "   AND users.user_id = message.user_id" +
 						  " ORDER BY created_on" +
@@ -66,8 +68,12 @@ var onConnect = function(socket) {
 
 						socket.join(socket.room);
 
+						for (var i = 0; i < result.rows.length; i++) {
+							setAvatar(result.rows[i], result.rows[i].email);
+							delete result.rows[i]["email"];
+						}
 
-						socket.emit("room.previousMessages", result.rows); //TODO
+						socket.emit("room.previousMessages", result.rows); 
 
 						socket.broadcast.to(socket.room).emit("room.userJoined", user);
 						console.log("User " + user.username + " has joined room for trip " + trip_id);
@@ -92,6 +98,7 @@ var onConnect = function(socket) {
 			trip_id: socket.trip_id,
 			msg_text: data.msg_text
 		};
+		setAvatar(message, user.email);
 		
 		var sql = {
 			text: "INSERT INTO message (user_id, trip_id, msg_text) VALUES ($1, $2, $3) RETURNING msg_id, created_on",
@@ -140,4 +147,8 @@ function leaveRoom(socket) {
 		socket.broadcast.to(socket.room).emit("room.userLeft", user);
 		console.log("User " + user.username + " has left room for trip " + trip_id);
 	}
+}
+
+function setAvatar(message, email) {
+	message.avatar = "http://www.gravatar.com/avatar/" + md5(email) + "?d=identicon";
 }
