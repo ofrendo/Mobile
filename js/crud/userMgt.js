@@ -9,7 +9,7 @@ exports.crud = new crud.CRUDModule("user",
 		return {
 			text: "INSERT INTO users (email, username, password, name) " +
 				  " VALUES($1, $2, crypt($3, gen_salt('bf', 8)), $4) " + 
-				  " RETURNING user_id",
+				  " RETURNING user_id, email, username, name",
 			values: [user.email, user.username, user.password, user.name]
 		};
 	},

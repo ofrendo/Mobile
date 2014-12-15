@@ -12,6 +12,10 @@ password
 
 Returns:
 user_id
+email
+username
+name
+
 
 //Sample usage:
 $.ajax({

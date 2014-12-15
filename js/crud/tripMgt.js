@@ -40,7 +40,11 @@ exports.crud.beforeSendCreate = function(req, res, trip) {
 		values: [req.session.user.user_id, trip.trip_id]
 	};
 	db.query(sql);
-}
+};
+
+exports.crud.beforeSendRead = function(req, res, trip) {
+	
+};	
 
 exports.crud.onAll = function(req, res, next) {
 	var trip_id = req.params.trip_id;
