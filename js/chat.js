@@ -13,10 +13,13 @@ var onConnect = function(socket) {
 	//socket.user needs to be the session: Get that from the cookie
 	var cookie = socket.client.request.headers.cookie;
 	sessionMgt.getSessionFromCookie(cookie, function(session) {
+		console.log("Checking user in Chat WS...");
 		if (!session || !session.user) {
+			console.log("User had no valid session.");
 			socket.disconnect();
 		}
 		else {
+			console.log("User had a valid session.");
 			socket.user = session.user;
 			delete socket.user["email"];
 		}
@@ -32,7 +35,6 @@ var onConnect = function(socket) {
 				socket.disconnect();
 			}
 			else {
-
 				var sql = {
 					text: "SELECT message.user_id, username, name, trip_id, msg_id, msg_text, created_on FROM users, message" +
 						  " WHERE message.trip_id=$1 " +
@@ -48,8 +50,14 @@ var onConnect = function(socket) {
 						socket.disconnect();
 					}
 					else {
-						if (!currentRooms[trip_id]) 
+						if (!currentRooms[trip_id]) {
 							currentRooms[trip_id] = [];
+						}
+						else {
+							if (currentRooms[trip_id].indexOf(user) !== -1) {
+								leaveRoom(socket);
+							}
+						}
 
 						currentRooms[trip_id].push(user);
 
@@ -107,11 +115,13 @@ var onConnect = function(socket) {
 	});
 
 	socket.on("room.leave", function() {
+		console.log("User leaving room...");
 		leaveRoom(socket);
 		socket.emit("room.left");
 	});
 
 	socket.on("disconnect", function() {
+		console.log("User disconnected.");
 		leaveRoom(socket);
 	});
 
@@ -120,6 +130,9 @@ var onConnect = function(socket) {
 function leaveRoom(socket) {
 	var user = socket.user;
 	var trip_id = socket.trip_id;
+
+	if (!currentRooms[trip_id])
+		return;
 
 	var index = currentRooms[trip_id].indexOf(user);
 	if (index != -1) {
