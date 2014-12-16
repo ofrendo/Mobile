@@ -228,6 +228,22 @@ name
 avatar
 ```
 
+#### Add user to trip
+```
+PUT /trip/:trip_id/addUser
+
+Required:
+user.user_id
+```
+
+#### Delete user from trip
+```
+DELETE /trip/:trip_id/removeUser
+
+Required:
+user.user_id
+```
+
 #### Get list of cities for trip
 ```
 GET /trip/:trip_id/cities

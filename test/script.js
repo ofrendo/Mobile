@@ -167,7 +167,7 @@ var updatedSampleTrip = JSON.parse(JSON.stringify(sampleTrip));
 updatedSampleTrip.name = "Updated test trip";
 
 QUnit.test("Trip tests", function(assert) {
-	assert.expect(13);
+	assert.expect(15);
 
 	var done;
 	done = assert.async();
@@ -207,6 +207,22 @@ QUnit.test("Trip tests", function(assert) {
 			sampleTrip.name = data.name;
 		},
 		complete: onAsyncComplete("Trip update", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/" + sampleTrip.trip_id + "/addUser",
+		data: {user: {user_id: 2}},
+		complete: onAsyncComplete("Trip add user", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "DELETE",
+		url: "/trip/" + sampleTrip.trip_id + "/removeUser",
+		data: {user: {user_id: 2}},
+		complete: onAsyncComplete("Tripp remove user", done)
 	});
 
 	done = assert.async();

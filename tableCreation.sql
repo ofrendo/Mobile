@@ -16,6 +16,9 @@ CREATE TABLE users (
 INSERT INTO users 
 	(email,username,password,name)
 	VALUES ('test_user@gmail.com', 'test_user', crypt('un1tt3st1ng', gen_salt('bf', 8)), 'Test user');
+INSERT INTO users 
+	(email,username,password,name)
+	VALUES ('test_user2@gmail.com', 'test_user2', crypt('un1tt3st1ng', gen_salt('bf', 8)), 'Test user 2');
 
 
 CREATE TABLE trip (

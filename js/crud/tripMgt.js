@@ -133,6 +133,49 @@ exports.crud.onReadTripUsers = function(req, res) {
 	});
 };
 
+exports.crud.onAddUserToTrip = function(req, res) {
+	var user_id = req.body.user.user_id;
+	var trip_id = req.params.trip_id;
+	var sql = {
+		text: "INSERT INTO user_trip (user_id, trip_id) " + 
+			  " VALUES ($1, $2)",
+		values: [user_id, trip_id]
+	};
+	db.query(sql, function(err, result) {
+		if (err) {
+			console.log("Error adding user to trip");
+			console.log(err);
+			res.status(500).end();
+		}
+		else {
+			res.status(200).end();
+		}
+	});
+};
+
+exports.crud.onRemoveUserFromTrip = function(req, res) {
+	var user_id = req.body.user.user_id;
+	var trip_id = req.params.trip_id;
+	var sql = {
+		text: "DELETE FROM user_trip " + 
+			  " WHERE user_id=$1" + 
+			  "   AND trip_id=$2",
+		values: [user_id, trip_id]
+	};
+	db.query(sql, function(err, result) {
+		if (err) {
+			console.log("Error removing user from trip");
+			console.log(err);
+			res.status(500).end();
+		}
+		else {
+			res.status(200).end();
+		}
+	});
+}
+
+
+
 exports.crud.onReadTripCities = function(req, res) {
 	var trip_id = req.params.trip_id;
 	var sql = {
