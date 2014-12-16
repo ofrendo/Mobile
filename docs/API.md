@@ -109,7 +109,7 @@ Status codes:
 - 404: Not found
 
 
-### Get user trips
+#### Get user trips
 ```
 GET /user/:user_id/trips
 
