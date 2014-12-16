@@ -217,6 +217,16 @@ end_date
 created_on
 ```
 
+#### Get list of users for trip
+```
+GET /trip/:trip_id/users
+
+Returns (array):
+user_id
+username
+name
+```
+
 #### Get list of cities for trip
 ```
 GET /trip/:trip_id/cities

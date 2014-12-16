@@ -106,6 +106,28 @@ exports.crud.onReadUserTrips = function(req, res) {
 	});
 };
 
+exports.crud.onReadTripUsers = function(req, res) {
+	var trip_id = req.params.trip_id;
+	var sql = {
+		text: "SELECT users.user_id, users.username, users.name" +
+			  "  FROM users, user_trip, trip" +
+			  " WHERE trip.trip_id=$1" + 
+			  "   AND trip.trip_id=user_trip.trip_id" + 
+			  "   AND user_trip.user_id=users.user_id",
+		values: [trip_id]
+	};
+	db.query(sql, function(err, result) {
+		if (err) {
+			console.log("Error reading trip users: trip_id=" + trip_id);
+			console.log(err);
+			res.status(500).end();
+		}
+		else {
+			res.status(200).send(result.rows);
+		}
+	});
+};
+
 exports.crud.onReadTripCities = function(req, res) {
 	var trip_id = req.params.trip_id;
 	var sql = {

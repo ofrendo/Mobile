@@ -167,7 +167,7 @@ var updatedSampleTrip = JSON.parse(JSON.stringify(sampleTrip));
 updatedSampleTrip.name = "Updated test trip";
 
 QUnit.test("Trip tests", function(assert) {
-	assert.expect(11);
+	assert.expect(13);
 
 	var done;
 	done = assert.async();
@@ -218,6 +218,16 @@ QUnit.test("Trip tests", function(assert) {
 			assert.ok(updated, "GET should return the same data");
 		},
 		complete: onAsyncComplete("Trip get", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "GET",
+		url: "/trip/1/users",
+		success: function(data) {
+			assert.ok(data.length>=0, "Should return an array of users");
+		},
+		complete: onAsyncComplete("Trip get users", done)
 	});
 
 	done = assert.async();
