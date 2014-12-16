@@ -225,6 +225,7 @@ Returns (array):
 user_id
 username
 name
+avatar
 ```
 
 #### Get list of cities for trip

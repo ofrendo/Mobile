@@ -2,8 +2,7 @@ var db = require("./db");
 var userMgt = require("./crud/userMgt");
 var tripMgt = require("./crud/tripMgt");
 var sessionMgt = require("./sessionMgt");
-var md5 = require("blueimp-md5").md5;
-
+var utils = require("./utils");
 
 exports.start = function(io) {
 	console.log("Started chat...");
@@ -23,7 +22,7 @@ var onConnect = function(socket) {
 		else {
 			console.log("User had a valid session.");
 			socket.user = session.user;
-			socket.user.emailMD5 = md5(socket.user.email);
+			socket.user.emailMD5 = utils.md5(socket.user.email);
 			delete socket.user["email"];
 		}
 	});
@@ -70,7 +69,7 @@ var onConnect = function(socket) {
 						socket.join(socket.room);
 
 						for (var i = 0; i < result.rows.length; i++) {
-							setAvatar(result.rows[i], md5(result.rows[i].email));
+							utils.setAvatar(result.rows[i], utils.md5(result.rows[i].email));
 							delete result.rows[i]["email"];
 						}
 
@@ -99,7 +98,7 @@ var onConnect = function(socket) {
 			trip_id: socket.trip_id,
 			msg_text: data.msg_text
 		};
-		setAvatar(message, socket.user.emailMD5);
+		utils.setAvatar(message, socket.user.emailMD5);
 		
 		var sql = {
 			text: "INSERT INTO message (user_id, trip_id, msg_text) VALUES ($1, $2, $3) RETURNING msg_id, created_on",
@@ -150,6 +149,3 @@ function leaveRoom(socket) {
 	}
 }
 
-function setAvatar(message, emailMD5) {
-	message.avatar = "http://www.gravatar.com/avatar/" + emailMD5 + "?d=identicon";
-}

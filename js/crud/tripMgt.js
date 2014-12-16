@@ -1,5 +1,6 @@
 var db = require(".././db");
 var crud = require("./crud");
+var utils = require(".././utils");
 
 exports.crud = new crud.CRUDModule("trip",
 	function(trip, req) {
@@ -109,7 +110,7 @@ exports.crud.onReadUserTrips = function(req, res) {
 exports.crud.onReadTripUsers = function(req, res) {
 	var trip_id = req.params.trip_id;
 	var sql = {
-		text: "SELECT users.user_id, users.username, users.name" +
+		text: "SELECT users.user_id, users.username, users.name, users.email" +
 			  "  FROM users, user_trip, trip" +
 			  " WHERE trip.trip_id=$1" + 
 			  "   AND trip.trip_id=user_trip.trip_id" + 
@@ -123,6 +124,10 @@ exports.crud.onReadTripUsers = function(req, res) {
 			res.status(500).end();
 		}
 		else {
+			for (var i =  0; i < result.rows.length; i++) {
+				utils.setAvatar(result.rows[i], utils.md5(result.rows[i].email));
+				delete result.rows[i].email;
+			}
 			res.status(200).send(result.rows);
 		}
 	});
