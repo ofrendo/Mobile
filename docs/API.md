@@ -217,6 +217,23 @@ end_date
 created_on
 ```
 
+#### Get list of cities for trip
+```
+GET /trip/:trip_id/cities
+
+Returns (array):
+city_id
+trip_id
+name
+place_id
+longitude
+latitude
+start_date
+end_date
+created_on
+ranking
+```
+
 #### Update trip
 ``` 
 PUT /trip/:trip_id
@@ -284,6 +301,24 @@ longitude
 latitude
 start_date
 end_date
+ranking
+```
+
+#### Get list of locations for city
+```
+GET /trip/:trip_id/city/:city_id/locations
+
+Returns (array):
+location_id
+city_id
+name
+place_id
+category
+longitude
+latitude
+start_date
+end_date
+created_on
 ranking
 ```
 

@@ -79,6 +79,10 @@ CREATE TABLE location (
 	ranking INT
 );
 
+INSERT INTO location
+	(city_id, name, place_id, longitude, latitude, ranking)
+	VALUES (1, 'test_location', 12345, -1, -1, -1);
+
 CREATE TABLE message (
 	msg_id SERIAL PRIMARY KEY,
 	user_id INT REFERENCES users(user_id),

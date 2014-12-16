@@ -42,10 +42,6 @@ exports.crud.beforeSendCreate = function(req, res, trip) {
 	db.query(sql);
 };
 
-exports.crud.beforeSendRead = function(req, res, trip) {
-	
-};	
-
 exports.crud.onAll = function(req, res, next) {
 	var trip_id = req.params.trip_id;
 	if (isNaN(trip_id)) {
@@ -108,4 +104,24 @@ exports.crud.onReadUserTrips = function(req, res) {
 			res.status(200).send(result.rows);
 		}
 	});
-}
+};
+
+exports.crud.onReadTripCities = function(req, res) {
+	var trip_id = req.params.trip_id;
+	var sql = {
+		text: "SELECT * FROM trip, city" + 
+			  " WHERE trip.trip_id=$1" + 
+			  "   AND trip.trip_id=city.trip_id",
+		values: [trip_id]
+	};
+	db.query(sql, function(err, result) {
+		if (err) {
+			console.log("Error reading trip cities: trip_id=" + trip_id);
+			console.log(err);
+			res.status(500).end();
+		}
+		else {
+			res.status(200).send(result.rows);
+		}
+	});
+};

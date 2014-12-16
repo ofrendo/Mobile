@@ -260,7 +260,7 @@ var updatedSampleCity = JSON.parse(JSON.stringify(sampleCity));
 updatedSampleCity.name = "Updated unit test city";
 
 QUnit.test("City tests", function(assert) {
-	assert.expect(9);
+	assert.expect(11);
 
 	var done;
 	done = assert.async();
@@ -275,6 +275,17 @@ QUnit.test("City tests", function(assert) {
 			testUser.user_id = data.user_id;
 		},
 		complete: onAsyncComplete("Test user login", done)
+	});
+
+	//Read cities for test trip
+	done = assert.async();
+	$.ajax({
+		type: "GET", 
+		url: "/trip/1/cities",
+		success: function(data) {
+			assert.ok(data.length >= 0, "cities for test trip should be an array");
+		},
+		complete: onAsyncComplete("Get cities for test trip", done)
 	});
 
 	//Use test trip with id=1 as parent
@@ -343,7 +354,7 @@ var updatedSampleLocation = JSON.parse(JSON.stringify(sampleLocation));
 updatedSampleLocation.name = "Updated unit test location";
 
 QUnit.test("Location tests", function(assert) {
-	assert.expect(9);
+	assert.expect(11);
 
 	var done;
 	done = assert.async();
@@ -358,6 +369,17 @@ QUnit.test("Location tests", function(assert) {
 			testUser.user_id = data.user_id;
 		},
 		complete: onAsyncComplete("Test user login", done)
+	});
+
+	//Read locations for test city
+	done = assert.async();
+	$.ajax({
+		type: "GET",
+		url: "/trip/1/city/1/locations",
+		success: function(data) {
+			assert.ok(data.length >= 0, "locations for test city should be an array");
+		},
+		complete: onAsyncComplete("Get locations for test city", done)
 	});
 
 	//Use test trip with id=1 as parent

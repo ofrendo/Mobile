@@ -1,3 +1,4 @@
+var db = require(".././db");
 var crud = require("./crud");
 var tripMgt = require("./tripMgt");
 
@@ -50,3 +51,23 @@ exports.crud.onAll = function(req, res, next) {
 		}
 	});
 };
+
+exports.crud.onReadCityLocations = function(req, res) {
+	var city_id = req.params.city_id;
+	var sql = {
+		text: "SELECT * FROM city, location" +
+			  " WHERE city.city_id=$1" + 
+			  "   AND city.city_id=location.city_id",
+		values: [city_id]
+	};
+	db.query(sql, function(err, result) {
+		if (err) {
+			console.log("Error reading city locations: city_id=" + city_id);
+			console.log(err);
+			res.status(500).end();
+		}
+		else {
+			res.status(200).send(result.rows);
+		}
+	})
+}
