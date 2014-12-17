@@ -7,10 +7,10 @@ var sessionMgt = require(".././sessionMgt");
 exports.crud = new crud.CRUDModule("user",
 	function(user) {
 		return {
-			text: "INSERT INTO users (email, username, password, name) " +
-				  " VALUES($1, $2, crypt($3, gen_salt('bf', 8)), $4) " + 
-				  " RETURNING user_id, email, username, name",
-			values: [user.email, user.username, user.password, user.name]
+			text: "INSERT INTO users (email, phone, username, password, name) " +
+				  " VALUES($1, $2, $3, crypt($4, gen_salt('bf', 8)), $5) " + 
+				  " RETURNING user_id, email, phone, username, name",
+			values: [user.email, user.phone, user.username, user.password, user.name]
 		};
 	},
 	function(user_id) {
@@ -21,10 +21,10 @@ exports.crud = new crud.CRUDModule("user",
 	},
 	function(user, req) {
 		return {
-			text: "UPDATE users SET email=$1, username=$2, password=crypt($3, password), name=$4, confirmed=true " +
-				  " WHERE user_id=$5 " + 
-				  " RETURNING user_id, email, username, name",
-			values: [user.email, user.username, user.password, user.name, req.params.user_id]
+			text: "UPDATE users SET email=$1, phone=$2, username=$3, password=crypt($4, password), name=$5, confirmed=true " +
+				  " WHERE user_id=$6 " + 
+				  " RETURNING user_id, email, phone, username, name",
+			values: [user.email, user.phone, user.username, user.password, user.name, req.params.user_id]
 		};
 	},
 	function(user_id) {
@@ -138,10 +138,10 @@ function doesUserExist(user, callback) {
 function addPreUser(user, callback) {
 	var sql = {
 		text: "INSERT INTO users " +
-			  " (email, phone, username, confirmed) " + 
-			  " VALUES ($1, $2, $3, false)" +
+			  " (email, phone, username, name, confirmed) " + 
+			  " VALUES ($1, $2, $3, $4, false)" +
 			  " RETURNING user_id",
-		values: [user.email, user.phone, user.username]
+		values: [user.email, user.phone, user.username, user.name]
 	};
 	db.query(sql, function(err, result) {
 		if (err) {

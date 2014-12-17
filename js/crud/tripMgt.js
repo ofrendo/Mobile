@@ -111,7 +111,7 @@ exports.crud.onReadUserTrips = function(req, res) {
 exports.crud.onReadTripUsers = function(req, res) {
 	var trip_id = req.params.trip_id;
 	var sql = {
-		text: "SELECT users.user_id, users.username, users.name, users.email" +
+		text: "SELECT users.user_id, users.username, users.name, users.email, users.confirmed" +
 			  "  FROM users, user_trip, trip" +
 			  " WHERE trip.trip_id=$1" + 
 			  "   AND trip.trip_id=user_trip.trip_id" + 

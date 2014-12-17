@@ -13,6 +13,7 @@ password
 Returns:
 user_id
 email
+phone
 username
 name
 
@@ -233,6 +234,7 @@ user_id
 username
 name
 avatar
+confirmed
 ```
 
 #### Add user to trip
@@ -243,6 +245,9 @@ Required is at least ONE of the following, preferably exactly ONE:
 user.email
 user.phone
 user.username
+
+Optional:
+user.name
 ```
 
 #### Delete user from trip
