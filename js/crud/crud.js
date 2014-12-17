@@ -11,8 +11,8 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 	function doRead(object_id, callback) {
 		doQuery(getSqlRead(object_id), callback);
 	}
-	function doUpdate(object, callback) {
-		doQuery(getSqlUpdate(object), callback);
+	function doUpdate(object, req, callback) {
+		doQuery(getSqlUpdate(object, req), callback);
 	}
 	function doDelete(object_id, req, callback) {
 		doQuery(getSqlDelete(object_id, req), callback);
@@ -92,7 +92,7 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 				return;
 			}
 		}
-		doUpdate(req.body[self.objectName], function(err, result) {
+		doUpdate(req.body[self.objectName], req, function(err, result) {
 			if (err) {
 				res.status(500).send(JSON.stringify({message: "Error during " + self.objectName + " update."}));
 				console.log("Error during " + self.objectName + " update:");

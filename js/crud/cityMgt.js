@@ -3,7 +3,7 @@ var crud = require("./crud");
 var tripMgt = require("./tripMgt");
 
 exports.crud = new crud.CRUDModule("city", 
-	function(req, city) {
+	function(city, req) {
 		return {
 			text: "INSERT INTO city" +
 				  " (trip_id, name, place_id, longitude, latitude, start_date, end_date, ranking)" + 
@@ -17,13 +17,13 @@ exports.crud = new crud.CRUDModule("city",
 			values: [city_id]
 		};
 	},
-	function(city) {
+	function(city, req) {
 		return {
 			text: "UPDATE city SET" +
-				  " trip_id=$1, name=$2, place_id=$3, longitude=$4, latitude=$5, start_date=$6, end_date=$7, ranking=$8" +
-				  " WHERE city_id=$9" +
+				  " name=$1, place_id=$2, longitude=$3, latitude=$4, start_date=$5, end_date=$6, ranking=$7" +
+				  " WHERE city_id=$8" +
 				  " RETURNING city_id, trip_id, name, place_id, longitude, latitude, start_date, end_date, ranking",
-			values: [city.trip_id, city.name, city.place_id, city.longitude, city.latitude, city.start_date, city.end_date, city.ranking, city.city_id]
+			values: [city.name, city.place_id, city.longitude, city.latitude, city.start_date, city.end_date, city.ranking, req.params.city_id]
 		};
 	},
 	function(city_id) {
@@ -40,6 +40,8 @@ exports.crud.onAll = function(req, res, next) {
 		res.status(400).end();
 		return;
 	}
+
+	next();
 };
 
 exports.crud.onReadCityLocations = function(req, res) {

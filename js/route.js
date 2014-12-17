@@ -49,7 +49,6 @@ router.routes = [
 		});
 
 	}),
-	//USER API CALLS
 	new Route("/auth/login", "post", userMgt.onLogin),
 	new Route("/auth/logout", "post", userMgt.onLogout),
 	new Route("/user", "post", userMgt.crud.onCreate),

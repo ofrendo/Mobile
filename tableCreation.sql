@@ -33,7 +33,7 @@ CREATE TABLE user_trip (
 CREATE TABLE city (
 	city_id SERIAL PRIMARY KEY,
 	trip_id  INT REFERENCES trip(trip_id),
-	name VARCHAR(50) -NOT NULL,
+	name VARCHAR(50) NOT NULL,
 	place_id VARCHAR(27),
 	longitude DECIMAL(10, 7) NOT NULL,
 	latitude DECIMAL(10, 7) NOT NULL,

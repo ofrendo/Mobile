@@ -80,11 +80,6 @@ QUnit.test("User tests", function(assert) {
 	});
 });
 
-//var counter = 7;
-//function done() { --counter || QUnit.start() };
-
-
-
 var testUser = {
 	username: "test_user",
 	password: "un1tt3st1ng"
@@ -213,7 +208,7 @@ QUnit.test("Trip tests", function(assert) {
 	$.ajax({
 		type: "PUT",
 		url: "/trip/" + sampleTrip.trip_id + "/addUser",
-		data: {user: {user_id: 2}},
+		data: {user: {email: "test_user2@gmail.com"}},
 		complete: onAsyncComplete("Trip add user", done)
 	});
 
@@ -328,7 +323,7 @@ QUnit.test("City tests", function(assert) {
 		complete: onAsyncComplete("Create city", done)
 	});
 
-	var done = assert.async();
+	done = assert.async();
 	$.ajax({
 		type: "PUT",
 		url: "/trip/1/city/" + updatedSampleCity.city_id,

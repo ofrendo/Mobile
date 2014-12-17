@@ -19,12 +19,12 @@ exports.crud = new crud.CRUDModule("user",
 			values: [user_id]
 		};
 	},
-	function(user) {
+	function(user, req) {
 		return {
 			text: "UPDATE users SET email=$1, username=$2, password=crypt($3, password), name=$4 " +
 				  " WHERE user_id=$5 " + 
 				  " RETURNING user_id, email, username, name",
-			values: [user.email, user.username, user.password, user.name, user.user_id]
+			values: [user.email, user.username, user.password, user.name, req.params.user_id]
 		};
 	},
 	function(user_id) {
@@ -67,6 +67,63 @@ exports.crud.onAll = function(req, res, next) {
 	}
 	next();
 };
+
+exports.crud.handleAddUser = function(user, callback) {
+	//Need to check if user exists first
+	//User must include at least one of the following: 
+	//email, phone, username
+	if (!user.phone && !user.email && !user.username) {
+		callback(false);
+		return;
+	}
+
+	var sql = {
+		text: "SELECT * FROM users " +
+			  " WHERE email=$1" + 
+			  "    OR phone=$2" + 
+			  "    OR username=$3" +
+			  " LIMIT 1",
+		values: [user.email, user.phone, user.username]
+	};
+
+	db.query(sql, function(err, result) {
+		if (err) {
+			console.log("Error handling user add");
+			console.log(err);
+			callback(false);
+		}
+		else {
+			if (result.rows.length === 1) {
+				//User exists already
+				callback(result.rows[0].user_id);
+			}
+			else{
+				//User does not exist: Need to add a new user with what data we have
+				addPreUser(user, callback);
+			}
+		}
+	})
+};
+
+function addPreUser(user, callback) {
+	var sql = {
+		text: "INSERT INTO users " +
+			  " (email, phone, username, confirmed) " + 
+			  " VALUES ($1, $2, $3, false)" +
+			  " RETURNING user_id",
+		values: [user.email, user.phone, user.username]
+	};
+	db.query(sql, function(err, result) {
+		if (err) {
+			console.log("Error adding pre user");
+			console.log(err);
+			callback(false);
+		}
+		else {
+			callback(result.rows[0].user_id);
+		}
+	});
+}
 
 function doLogin(username, password, callback) {
 	var sql = {

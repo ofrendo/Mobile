@@ -16,12 +16,12 @@ exports.crud = new crud.CRUDModule("trip",
 			values: [trip_id]
 		}
 	},
-	function(trip) {
+	function(trip, req) {
 		return {
 			text: "UPDATE trip SET name=$1, start_date=$2, end_date=$3 " +
 				  " WHERE trip_id=$4" +
 				  " RETURNING trip_id, created_by, name, created_on, start_date, end_date",
-			values: [trip.name, trip.start_date, trip.end_date, trip.trip_id]
+			values: [trip.name, trip.start_date, trip.end_date, req.params.trip_id]
 		};
 	},
 	function(trip_id, req) {
@@ -136,25 +136,28 @@ exports.crud.onReadTripUsers = function(req, res) {
 
 exports.crud.onAddUserToTrip = function(req, res) {
 	var trip_id = req.params.trip_id;
-
-	//Need to check if user exists first
-	
-
-
-	var sql = {
-		text: "INSERT INTO user_trip (user_id, trip_id) " + 
-			  " VALUES ($1, $2)",
-		values: [user_id, trip_id]
-	};
-	db.query(sql, function(err, result) {
-		if (err) {
-			console.log("Error adding user to trip");
-			console.log(err);
+	var user = req.body.user;
+	userMgt.crud.handleAddUser(user, function(user_id) {
+		if (user_id === false) {
 			res.status(500).end();
+			return;
 		}
-		else {
-			res.status(200).end();
-		}
+
+		var sql = {
+			text: "INSERT INTO user_trip (user_id, trip_id) " + 
+				  " VALUES ($1, $2)",
+			values: [user_id, trip_id]
+		};
+		db.query(sql, function(err, result) {
+			if (err) {
+				console.log("Error adding user to trip");
+				console.log(err);
+				res.status(500).end();
+			}
+			else {
+				res.status(200).end();
+			}
+		});
 	});
 };
 
