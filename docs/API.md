@@ -232,8 +232,10 @@ avatar
 ```
 PUT /trip/:trip_id/addUser
 
-Required:
-user.user_id
+Required is at least ONE of the following, preferably exactly ONE:
+user.email
+user.phone
+user.username
 ```
 
 #### Delete user from trip
