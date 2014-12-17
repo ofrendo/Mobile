@@ -214,7 +214,7 @@ QUnit.test("Trip tests", function(assert) {
 
 	done = assert.async();
 	$.ajax({
-		type: "DELETE",
+		type: "PUT",
 		url: "/trip/" + sampleTrip.trip_id + "/removeUser",
 		data: {user: {user_id: 2}},
 		complete: onAsyncComplete("Tripp remove user", done)
