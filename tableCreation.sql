@@ -14,14 +14,6 @@ CREATE TABLE users (
   name VARCHAR(100)
 );
 
-INSERT INTO users 
-	(email,username,password,name)
-	VALUES ('test_user@gmail.com', 'test_user', crypt('un1tt3st1ng', gen_salt('bf', 8)), 'Test user');
-INSERT INTO users 
-	(email,username,password,name)
-	VALUES ('test_user2@gmail.com', 'test_user2', crypt('un1tt3st1ng', gen_salt('bf', 8)), 'Test user 2');
-
-
 CREATE TABLE trip (
 	trip_id SERIAL PRIMARY KEY,
 	created_by INT REFERENCES users(user_id),
@@ -31,26 +23,11 @@ CREATE TABLE trip (
 	end_date TIMESTAMP
 ); 
 
-INSERT INTO trip 
-	(name, created_by)
-	VALUES ('test_trip', 1);
-INSERT INTO trip 
-	(name, created_by, start_date, end_date)
-	VALUES ('Amerika - Testreise', 1, '2014-12-10T00:00:00.000Z', '2014-12-25T00:00:00.000Z');	
-	
-
 CREATE TABLE user_trip (
 	user_id INT REFERENCES users(user_id),
-	trip_id INT REFERENCES trip(trip_id)
+	trip_id INT REFERENCES trip(trip_id),
+	PRIMARY KEY(user_id, trip_id)
 );
-
-INSERT INTO user_trip 
-	(user_id, trip_id)
-	VALUES (1, 1);
-INSERT INTO user_trip 
-	(user_id, trip_id)
-	VALUES (1, 2);
-
 
 CREATE TABLE city (
 	city_id SERIAL PRIMARY KEY,
@@ -64,10 +41,6 @@ CREATE TABLE city (
 	created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
 	ranking INT
 );
-
-INSERT INTO city
-	(trip_id, name, place_id, longitude, latitude, ranking)
-	VALUES (1, 'test_city', 1234, -1, -1, -1);
 
 CREATE TABLE location (
 	location_id SERIAL PRIMARY KEY,
@@ -83,10 +56,6 @@ CREATE TABLE location (
 	ranking INT
 );
 
-INSERT INTO location
-	(city_id, name, place_id, longitude, latitude, ranking)
-	VALUES (1, 'test_location', 12345, -1, -1, -1);
-
 CREATE TABLE message (
 	msg_id SERIAL PRIMARY KEY,
 	user_id INT REFERENCES users(user_id),
@@ -94,3 +63,34 @@ CREATE TABLE message (
 	msg_text TEXT NOT NULL,
 	created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+
+INSERT INTO users 
+	(email,username,password,name)
+	VALUES ('test_user@gmail.com', 'test_user', crypt('un1tt3st1ng', gen_salt('bf', 8)), 'Test user');
+INSERT INTO users 
+	(email,username,password,name)
+	VALUES ('test_user2@gmail.com', 'test_user2', crypt('un1tt3st1ng', gen_salt('bf', 8)), 'Test user 2');
+
+INSERT INTO trip 
+	(name, created_by)
+	VALUES ('test_trip', 1);
+INSERT INTO trip 
+	(name, created_by, start_date, end_date)
+	VALUES ('Amerika - Testreise', 1, '2014-12-10T00:00:00.000Z', '2014-12-25T00:00:00.000Z');	
+
+INSERT INTO user_trip 
+	(user_id, trip_id)
+	VALUES (1, 1);
+INSERT INTO user_trip 
+	(user_id, trip_id)
+	VALUES (1, 2);
+	
+INSERT INTO city
+	(trip_id, name, place_id, longitude, latitude, ranking)
+	VALUES (1, 'test_city', 1234, -1, -1, -1);
+	
+INSERT INTO location
+	(city_id, name, place_id, longitude, latitude, ranking)
+	VALUES (1, 'test_location', 12345, -1, -1, -1);
