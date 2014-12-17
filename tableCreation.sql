@@ -7,9 +7,10 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
-  email VARCHAR(100) NOT NULL,
-  username VARCHAR(30) NOT NULL UNIQUE,
-  password VARCHAR(112) NOT NULL,
+  email VARCHAR(100) UNIQUE,
+  phone VARCHAR(50) UNIQUE,
+  username VARCHAR(30) UNIQUE,
+  password VARCHAR(112),
   name VARCHAR(100)
 );
 
