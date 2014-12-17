@@ -21,7 +21,7 @@ exports.crud = new crud.CRUDModule("user",
 	},
 	function(user, req) {
 		return {
-			text: "UPDATE users SET email=$1, username=$2, password=crypt($3, password), name=$4 " +
+			text: "UPDATE users SET email=$1, username=$2, password=crypt($3, password), name=$4, confirmed=true " +
 				  " WHERE user_id=$5 " + 
 				  " RETURNING user_id, email, username, name",
 			values: [user.email, user.username, user.password, user.name, req.params.user_id]
@@ -34,6 +34,25 @@ exports.crud = new crud.CRUDModule("user",
 		};
 	}
 );
+
+exports.onCreateUser = function(req, res) { //called on register
+	var user = req.body.user;
+
+	//Need to check if user exists already
+	doesUserExist(user, function(result) {
+		if (result === false) {
+			res.status(500).end();
+			return;
+		}
+
+		if (!result.user_id) {
+			exports.crud.onCreate(req, res);
+		}
+		else {
+			exports.crud.onUpdate(req, res);
+		}
+	});
+}
 
 exports.crud.beforeSQLCheckCreate = function(req, res, user) {
 	return emailValidator.validate(user.email);
@@ -77,6 +96,17 @@ exports.crud.handleAddUser = function(user, callback) {
 		return;
 	}
 
+	doesUserExist(user, function(result) {
+		if (result.user_id) {
+			callback(result.user_id);
+		}
+		else {
+			addPreUser(user, callback);
+		}
+	});
+};
+
+function doesUserExist(user, callback) {
 	var sql = {
 		text: "SELECT * FROM users " +
 			  " WHERE email=$1" + 
@@ -88,22 +118,22 @@ exports.crud.handleAddUser = function(user, callback) {
 
 	db.query(sql, function(err, result) {
 		if (err) {
-			console.log("Error handling user add");
+			console.log("Error checking for user exist");
 			console.log(err);
 			callback(false);
 		}
 		else {
 			if (result.rows.length === 1) {
 				//User exists already
-				callback(result.rows[0].user_id);
+				callback(result.rows[0]);
 			}
 			else{
 				//User does not exist: Need to add a new user with what data we have
-				addPreUser(user, callback);
+				callback({});
 			}
 		}
 	})
-};
+}
 
 function addPreUser(user, callback) {
 	var sql = {

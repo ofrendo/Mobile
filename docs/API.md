@@ -62,6 +62,9 @@ user.username
 user.password
 user.name
 
+Optional:
+user.phone
+
 Returns:
 user_id
 
@@ -97,6 +100,7 @@ GET /user/:user_id
 Returns:
 user_id
 email
+phone
 username
 name
 ```
@@ -134,6 +138,9 @@ user.email
 user.username
 user.password
 user.name
+
+Optional:
+user.phone
 
 Returns:
 user_id

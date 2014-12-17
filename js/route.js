@@ -51,7 +51,7 @@ router.routes = [
 	}),
 	new Route("/auth/login", "post", userMgt.onLogin),
 	new Route("/auth/logout", "post", userMgt.onLogout),
-	new Route("/user", "post", userMgt.crud.onCreate),
+	new Route("/user", "post", userMgt.onCreateUser),
 	new Route("/user/*", "all", sessionMgt.onCheckSession),
 	new Route("/user/:user_id", "all", userMgt.crud.onAll),
 	new Route("/user/:user_id", "get", userMgt.crud.onRead),
