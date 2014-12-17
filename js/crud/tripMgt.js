@@ -127,7 +127,6 @@ exports.crud.onReadTripUsers = function(req, res) {
 		else {
 			for (var i =  0; i < result.rows.length; i++) {
 				utils.setAvatar(result.rows[i], utils.md5(result.rows[i].email));
-				delete result.rows[i].email;
 			}
 			res.status(200).send(result.rows);
 		}
