@@ -3,12 +3,12 @@ var crud = require("./crud");
 var tripMgt = require("./tripMgt");
 
 exports.crud = new crud.CRUDModule("city", 
-	function(city) {
+	function(req, city) {
 		return {
 			text: "INSERT INTO city" +
 				  " (trip_id, name, place_id, longitude, latitude, start_date, end_date, ranking)" + 
 				  " VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING city_id",
-			values: [city.trip_id, city.name, city.place_id, city.longitude, city.latitude, city.start_date, city.end_date, city.ranking]
+			values: [req.params.trip_id, city.name, city.place_id, city.longitude, city.latitude, city.start_date, city.end_date, city.ranking]
 		};
 	},
 	function(city_id) {
@@ -35,21 +35,11 @@ exports.crud = new crud.CRUDModule("city",
 );
 
 exports.crud.onAll = function(req, res, next) {
-	var trip_id = req.params.trip_id;
 	var city_id = req.params.city_id;
-	if (isNaN(trip_id) || isNaN(city_id)) {
+	if (isNaN(city_id)) {
 		res.status(400).end();
 		return;
 	}
-
-	tripMgt.isUserAllowed(req.session.user.user_id, trip_id, function(result, status) {
-		if (result === false) {
-			res.status(status).end();
-		}
-		else {
-			next();
-		}
-	});
 };
 
 exports.crud.onReadCityLocations = function(req, res) {

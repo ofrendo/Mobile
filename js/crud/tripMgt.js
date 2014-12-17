@@ -1,6 +1,7 @@
 var db = require(".././db");
 var crud = require("./crud");
 var utils = require(".././utils");
+var userMgt = require("./userMgt");
 
 exports.crud = new crud.CRUDModule("trip",
 	function(trip, req) {
@@ -134,8 +135,12 @@ exports.crud.onReadTripUsers = function(req, res) {
 };
 
 exports.crud.onAddUserToTrip = function(req, res) {
-	var user_id = req.body.user.user_id;
 	var trip_id = req.params.trip_id;
+
+	//Need to check if user exists first
+	
+
+
 	var sql = {
 		text: "INSERT INTO user_trip (user_id, trip_id) " + 
 			  " VALUES ($1, $2)",

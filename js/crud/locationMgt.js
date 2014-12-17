@@ -37,20 +37,9 @@ exports.crud = new crud.CRUDModule("location",
 );
 
 exports.crud.onAll = function(req, res, next) {
-	var trip_id = req.params.trip_id;
-	var city_id = req.params.city_id;
 	var location_id = req.params.location_id;
-	if (isNaN(trip_id) || isNaN(city_id) || isNaN(location_id)) {
+	if (isNaN(location_id)) {
 		res.status(400).end();
 		return;
 	}
-
-	tripMgt.isUserAllowed(req.session.user.user_id, trip_id, function(result, status) {
-		if (result == false) {
-			res.status(status).end();
-		}
-		else {
-			next();
-		}
-	});
 }
