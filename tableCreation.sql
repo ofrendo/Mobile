@@ -73,7 +73,10 @@ INSERT INTO users
 INSERT INTO users 
 	(email,username,password,name)
 	VALUES ('test_user2@gmail.com', 'test_user2', crypt('un1tt3st1ng', gen_salt('bf', 8)), 'Test user 2');
-
+INSERT INTO users 
+	(email,username,password,name)
+	VALUES ('mliedtke@gmx.de', 'matthias', crypt('test', gen_salt('bf', 8)), 'Matthias Liedtke');
+	
 INSERT INTO trip 
 	(name, created_by)
 	VALUES ('test_trip', 1);
@@ -87,10 +90,22 @@ INSERT INTO user_trip
 INSERT INTO user_trip 
 	(user_id, trip_id)
 	VALUES (1, 2);
+INSERT INTO user_trip 
+	(user_id, trip_id)
+	VALUES (2, 2);
 	
 INSERT INTO city
 	(trip_id, name, place_id, longitude, latitude, ranking)
 	VALUES (1, 'test_city', 1234, -1, -1, -1);
+INSERT INTO city
+	(trip_id, name, place_id, longitude, latitude, ranking)
+	VALUES (2, 'Boston', 'ChIJGzE9DS1l44kRoOhiASS_fHg', -71.0600970, 42.3584865, -1);
+INSERT INTO city
+	(trip_id, name, place_id, longitude, latitude, ranking)
+	VALUES (2, 'New York', 'ChIJOwg_06VPwokRYv534QaPC8g', -74.0059413, 40.7127837, -1);
+INSERT INTO city
+	(trip_id, name, place_id, longitude, latitude, ranking)
+	VALUES (2, 'Washington', 'ChIJW-T2Wt7Gt4kRKl2I1CJFUsI', -77.0368707, 38.9071923, -1);
 	
 INSERT INTO location
 	(city_id, name, place_id, longitude, latitude, ranking)
