@@ -92,7 +92,7 @@ INSERT INTO user_trip
 	VALUES (1, 2);
 INSERT INTO user_trip 
 	(user_id, trip_id)
-	VALUES (2, 2);
+	VALUES (3, 2);
 	
 INSERT INTO city
 	(trip_id, name, place_id, longitude, latitude, ranking)
