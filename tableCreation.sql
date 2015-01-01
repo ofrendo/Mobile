@@ -65,6 +65,10 @@ CREATE TABLE message (
 	created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE message_seen (
+	user_id INT REFERENCES users(user_id),
+	msg_id INT REFERENCES message(msg_id)
+);
 
 
 INSERT INTO users 
