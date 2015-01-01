@@ -186,7 +186,8 @@ exports.crud.onRemoveUserFromTrip = function(req, res) {
 exports.crud.onReadTripCities = function(req, res) {
 	var trip_id = req.params.trip_id;
 	var sql = {
-		text: "SELECT * FROM trip, city" + 
+		text: "SELECT *, (SELECT COUNT(*) FROM location WHERE location.city_id = city.city_id) AS no_locations" + 
+			  " FROM trip, city" + 
 			  " WHERE trip.trip_id=$1" + 
 			  "   AND trip.trip_id=city.trip_id",
 		values: [trip_id]
