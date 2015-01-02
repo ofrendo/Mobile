@@ -375,7 +375,6 @@ city.name
 city.place_id
 city.longitude
 city.latitude
-city.index
 
 Optional:
 city.start_date
@@ -456,7 +455,6 @@ location.place_id
 location.category
 location.longitude
 location.latitude
-location.index
 
 Optional:
 location.start_date
