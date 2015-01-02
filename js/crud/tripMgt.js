@@ -6,7 +6,8 @@ var userMgt = require("./userMgt");
 exports.crud = new crud.CRUDModule("trip",
 	function(trip, req) {
 		return {
-			text: "INSERT INTO trip (name, created_by, start_date, end_date, index) VALUES ($1, $2, $3, $4) RETURNING trip_id",
+			text: "INSERT INTO trip (name, created_by, start_date, end_date) " +
+				  " VALUES ($1, $2, $3, $4) RETURNING trip_id",
 			values: [trip.name, req.session.user.user_id, trip.start_date, trip.end_date]
 		};
 	},
@@ -18,10 +19,10 @@ exports.crud = new crud.CRUDModule("trip",
 	},
 	function(trip, req) {
 		return {
-			text: "UPDATE trip SET name=$1, start_date=$2, end_date=$3, index=$4 " +
-				  " WHERE trip_id=$5" +
+			text: "UPDATE trip SET name=$1, start_date=$2, end_date=$3 " +
+				  " WHERE trip_id=$4" +
 				  " RETURNING *",
-			values: [trip.name, trip.start_date, trip.end_date, trip.index, req.params.trip_id]
+			values: [trip.name, trip.start_date, trip.end_date, req.params.trip_id]
 		};
 	},
 	function(trip_id, req) {

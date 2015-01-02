@@ -5,10 +5,10 @@ exports.crud = new crud.CRUDModule("location",
 	function(location, req) {
 		return {
 			text: "INSERT INTO location" +
-				  " (city_id, name, place_id, category, longitude, latitude, start_date, end_date, index)" +
-				  " VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING location_id",
+				  " (city_id, name, place_id, category, longitude, latitude, start_date, end_date)" +
+				  " VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING location_id",
 			values: [req.params.city_id, location.name, location.place_id, location.category, location.longitude,
-					 location.latitude, location.start_date, location.end_date, location.index]
+					 location.latitude, location.start_date, location.end_date]
 		};
 	},
 	function(location_id) {
@@ -20,11 +20,11 @@ exports.crud = new crud.CRUDModule("location",
 	function(location, req) {
 		return {
 			text: "UPDATE location SET" +
-				  " name=$1, place_id=$2, category=$3, longitude=$4, latitude=$5, start_date=$6, end_date=$7, index=$8" + 
-				  " WHERE location_id=$9" +
+				  " name=$1, place_id=$2, category=$3, longitude=$4, latitude=$5, start_date=$6, end_date=$7" + 
+				  " WHERE location_id=$8" +
 				  " RETURNING *",
 			values: [location.name, location.place_id, location.category, location.longitude,
-					 location.latitude, location.start_date, location.end_date, location.index,
+					 location.latitude, location.start_date, location.end_date,
 					 req.params.location_id]
 		};
 	},
