@@ -281,7 +281,7 @@ var updatedSampleCity = JSON.parse(JSON.stringify(sampleCity));
 updatedSampleCity.name = "Updated unit test city";
 
 QUnit.test("City tests", function(assert) {
-	assert.expect(11);
+	assert.expect(15);
 
 	var done;
 	done = assert.async();
@@ -309,7 +309,7 @@ QUnit.test("City tests", function(assert) {
 		complete: onAsyncComplete("Get cities for test trip", done)
 	});
 
-	//Use test trip with id=1 as parent
+	//Use test trip with id=1 as parent and create new city
 	done = assert.async();
 	$.ajax({
 		type: "POST",
@@ -343,6 +343,39 @@ QUnit.test("City tests", function(assert) {
 			assert.ok(data.city_id == sampleCity.city_id, "Should return the correct city")
 		},
 		complete: onAsyncComplete("City get", done)
+	});
+
+	//Try moving index of cities
+	done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/2/city/2/move",
+		data: {
+			fromIndex: 2,
+			toIndex: 3
+		},
+		complete: onAsyncComplete("City move (change index)", done)
+	});
+	//Check index of other city to make sure it was changed too
+	done = assert.async();
+	$.ajax({
+		type: "GET",
+		url: "/trip/2/city/3",
+		success: function(data, textStatus, jqXHR) {
+			assert.ok(data.index == 2, "Should have changed the index of the previously first city")
+		},
+		complete: onAsyncComplete("Get updated index of city", done)
+	});
+	//Move it back
+	done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/2/city/2/move",
+		data: {
+			fromIndex: 3,
+			toIndex: 2
+		},
+		complete: onAsyncComplete("City move (change index) back", done)
 	});
 
 	done = assert.async();

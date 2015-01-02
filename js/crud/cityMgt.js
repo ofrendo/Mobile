@@ -34,6 +34,54 @@ exports.crud = new crud.CRUDModule("city",
 	}
 );
 
+exports.crud.onMove = function(req, res) {
+	var trip_id = req.params.trip_id;
+	var city_id = req.params.city_id;
+	var fromIndex = req.body.fromIndex;
+	var toIndex = req.body.toIndex;
+
+	if (fromIndex == toIndex || isNaN(fromIndex) || isNaN(toIndex)) { //Bad request
+		res.status(400).end();
+	}
+
+	var sql = [];
+	if (fromIndex < toIndex) {
+		sql.push({
+			text: "UPDATE city SET index=index-1 " + 
+				  " WHERE trip_id=$1 "  +
+				  "   AND index>$2" +
+				  "   AND index<=$3",
+			values: [trip_id, fromIndex, toIndex]
+		});
+	}
+	else {
+		sql.push({
+			text: "UPDATE city SET index=index+1 " +
+				  " WHERE trip_id=$1 " + 
+				  "   AND index>=$2" + 
+				  "   AND index<$3",
+			values: [trip_id, toIndex, fromIndex]
+		});
+	}
+
+	sql.push({
+		text: "UPDATE city SET index=$2 " + 
+			  " WHERE city_id=$1 ",
+		values: [city_id, toIndex]
+	});
+
+	db.query(sql, function(err, result) {
+		if (err) {
+			res.status(500).end();
+			return;
+		}
+
+		console.log("Moved city " + city_id + " in trip " + trip_id + " from " + fromIndex + " to " + toIndex);
+		res.status(200).end();
+	});
+};	
+
+
 exports.crud.onAll = function(req, res, next) {
 	var city_id = req.params.city_id;
 	if (isNaN(city_id)) {

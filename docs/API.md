@@ -392,6 +392,15 @@ end_date
 index
 ```
 
+#### Move city (change index of city)
+```
+PUT /trip/:trip_id/city/:city_id/move
+
+Required:
+fromIndex
+toIndex
+```
+
 #### Delete city
 ```
 DELETE /trip/:trip_id/city/:city_id

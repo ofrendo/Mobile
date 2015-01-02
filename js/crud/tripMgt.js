@@ -182,8 +182,6 @@ exports.crud.onRemoveUserFromTrip = function(req, res) {
 	});
 }
 
-
-
 exports.crud.onReadTripCities = function(req, res) {
 	var trip_id = req.params.trip_id;
 	var sql = {
