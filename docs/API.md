@@ -91,6 +91,7 @@ This call also logs you in. It is unnecessary to call `/login` after this.
 Status codes:
 - 200: User creation successful
 - 400: Bad request, for example not an email adress
+- 403: Trying to create a user that already exists AND has been confirmed
 - 500: User exists already or internal server error
 
 

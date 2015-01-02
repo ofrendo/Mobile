@@ -45,11 +45,14 @@ exports.onCreateUser = function(req, res) { //called on register
 			return;
 		}
 
-		if (!result.user_id) {
+		if (!result.user_id) { //User does not exist
 			exports.crud.onCreate(req, res);
 		}
-		else {
+		else if (result.confirmed == false) { //User exists already and has not been confirmed
 			exports.crud.onUpdate(req, res);
+		}
+		else {
+			res.status(403).end();
 		}
 	});
 }
