@@ -42,8 +42,27 @@ exports.crud.onMove = function(req, res) {
 
 	if (fromIndex == toIndex || isNaN(fromIndex) || isNaN(toIndex)) { //Bad request
 		res.status(400).end();
+		return;
 	}
 
+	var sql = {
+		text: "SELECT * FROM city WHERE city_id=$1 AND index=$2",
+		values: [city_id, fromIndex]
+	};
+	db.query(sql, function(err, result) {
+		if (err) {
+			res.status(500).end();
+		}
+		else if (result.rows.length === 0)  { //Wrong fromIndex
+			res.status(400).end();
+		}
+		else {
+			completeMove(trip_id, city_id, fromIndex, toIndex, res);
+		}
+	})
+};	
+
+function completeMove(trip_id, city_id, fromIndex, toIndex, res) {
 	var sql = [];
 	if (fromIndex < toIndex) {
 		sql.push({
@@ -79,8 +98,7 @@ exports.crud.onMove = function(req, res) {
 		console.log("Moved city " + city_id + " in trip " + trip_id + " from " + fromIndex + " to " + toIndex);
 		res.status(200).end();
 	});
-};	
-
+}
 
 exports.crud.onAll = function(req, res, next) {
 	var city_id = req.params.city_id;
