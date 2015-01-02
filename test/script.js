@@ -217,7 +217,7 @@ QUnit.test("Trip tests", function(assert) {
 		type: "PUT",
 		url: "/trip/" + sampleTrip.trip_id + "/removeUser",
 		data: {user: {user_id: 2}},
-		complete: onAsyncComplete("Tripp remove user", done)
+		complete: onAsyncComplete("Trip remove user", done)
 	});
 
 	done = assert.async();

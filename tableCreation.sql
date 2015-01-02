@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS message_seen;
 DROP TABLE IF EXISTS message;
 DROP TABLE IF EXISTS location;
 DROP TABLE IF EXISTS city;
@@ -21,7 +22,8 @@ CREATE TABLE trip (
 	name VARCHAR(50) NOT NULL,
 	created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
 	start_date TIMESTAMP, 
-	end_date TIMESTAMP
+	end_date TIMESTAMP,
+	index SERIAL
 ); 
 
 CREATE TABLE user_trip (
@@ -40,7 +42,7 @@ CREATE TABLE city (
 	start_date TIMESTAMP,
 	end_date TIMESTAMP,
 	created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-	ranking INT
+	index SERIAL
 );
 
 CREATE TABLE location (
@@ -54,7 +56,7 @@ CREATE TABLE location (
 	start_date TIMESTAMP,
 	end_date TIMESTAMP,
 	created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	ranking INT
+	index SERIAL
 );
 
 CREATE TABLE message (
@@ -99,18 +101,18 @@ INSERT INTO user_trip
 	VALUES (3, 2);
 	
 INSERT INTO city
-	(trip_id, name, place_id, longitude, latitude, ranking)
+	(trip_id, name, place_id, longitude, latitude, index)
 	VALUES (1, 'test_city', 1234, -1, -1, -1);
 INSERT INTO city
-	(trip_id, name, place_id, longitude, latitude, ranking)
+	(trip_id, name, place_id, longitude, latitude, index)
 	VALUES (2, 'Boston', 'ChIJGzE9DS1l44kRoOhiASS_fHg', -71.0600970, 42.3584865, -1);
 INSERT INTO city
-	(trip_id, name, place_id, longitude, latitude, ranking)
+	(trip_id, name, place_id, longitude, latitude, index)
 	VALUES (2, 'New York', 'ChIJOwg_06VPwokRYv534QaPC8g', -74.0059413, 40.7127837, -1);
 INSERT INTO city
-	(trip_id, name, place_id, longitude, latitude, ranking)
+	(trip_id, name, place_id, longitude, latitude, index)
 	VALUES (2, 'Washington', 'ChIJW-T2Wt7Gt4kRKl2I1CJFUsI', -77.0368707, 38.9071923, -1);
 	
 INSERT INTO location
-	(city_id, name, place_id, longitude, latitude, ranking)
+	(city_id, name, place_id, longitude, latitude, index)
 	VALUES (1, 'test_location', 12345, -1, -1, -1);

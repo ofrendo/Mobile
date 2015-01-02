@@ -224,6 +224,7 @@ name
 start_date
 end_date
 created_on
+index
 ```
 
 #### Get list of users for trip
@@ -273,7 +274,7 @@ latitude
 start_date
 end_date
 created_on
-ranking
+index
 ```
 
 #### Update trip
@@ -293,6 +294,7 @@ name
 start_date
 end_date
 created_on
+index
 ```
 
 #### Delete trip
@@ -320,7 +322,6 @@ city.name
 city.place_id
 city.longitude
 city.latitude
-city.ranking
 
 Optional:
 city.start_date
@@ -343,7 +344,7 @@ longitude
 latitude
 start_date
 end_date
-ranking
+index
 ```
 
 #### Get list of locations for city
@@ -361,7 +362,7 @@ latitude
 start_date
 end_date
 created_on
-ranking
+index
 ```
 
 #### Update city
@@ -374,7 +375,7 @@ city.name
 city.place_id
 city.longitude
 city.latitude
-city.ranking
+city.index
 
 Optional:
 city.start_date
@@ -389,7 +390,7 @@ longitude
 latitude
 start_date
 end_date
-ranking
+index
 ```
 
 #### Delete city
@@ -418,7 +419,6 @@ location.place_id
 location.category
 location.longitude
 location.latitude
-location.ranking
 
 Optional:
 location.start_date
@@ -442,7 +442,7 @@ longitude
 latitude
 start_date
 end_date
-ranking
+index
 ```
 
 #### Update location
@@ -456,7 +456,7 @@ location.place_id
 location.category
 location.longitude
 location.latitude
-location.ranking
+location.index
 
 Optional:
 location.start_date
@@ -472,7 +472,7 @@ longitude
 latitude
 start_date
 end_date
-ranking
+index
 ```
 
 #### Delete location
