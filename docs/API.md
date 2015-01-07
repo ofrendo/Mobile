@@ -487,6 +487,20 @@ end_date
 index
 ```
 
+#### Move location (change index of location)
+```
+PUT /trip/:trip_id/city/:city_id/location/:location_id/move
+
+Required:
+fromIndex
+toIndex
+```
+
+Note: This API call will return 400 if:
+- fromIndex or toIndex are not numbers
+- fromIndex equals toIndex
+- fromIndex does not equal the index currently saved in the DB (for example when working with an old version in the frontend)
+
 #### Delete location
 ```
 DELETE /trip/:trip_id/city/:city_id/location/:location_id
