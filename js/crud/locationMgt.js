@@ -14,7 +14,8 @@ exports.crud = new crud.CRUDModule("location",
 	},
 	function(location_id) {
 		return {
-			text: "SELECT * FROM location WHERE location_id=$1",
+			text: "SELECT * FROM location " +
+				  " WHERE location_id=$1",
 			values: [location_id]
 		};
 	},

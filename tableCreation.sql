@@ -22,14 +22,14 @@ CREATE TABLE trip (
 	name VARCHAR(50) NOT NULL,
 	created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
 	start_date TIMESTAMP, 
-	end_date TIMESTAMP,
-	index SERIAL
+	end_date TIMESTAMP
 ); 
 
 CREATE TABLE user_trip (
 	user_id INT REFERENCES users(user_id),
 	trip_id INT REFERENCES trip(trip_id),
-	PRIMARY KEY(user_id, trip_id)
+	PRIMARY KEY(user_id, trip_id),
+	index SERIAL
 );
 
 CREATE TABLE city (
@@ -85,20 +85,31 @@ INSERT INTO users
 	
 INSERT INTO trip 
 	(name, created_by)
-	VALUES ('test_trip', 1);
+	VALUES ('test_trip1', 1);
+INSERT INTO user_trip 
+	(user_id, trip_id)
+	VALUES (1, 1);
+INSERT INTO trip 
+	(name, created_by)
+	VALUES ('test_trip2', 1);
+INSERT INTO user_trip 
+	(user_id, trip_id)
+	VALUES (1, 2);
+INSERT INTO trip 
+	(name, created_by)
+	VALUES ('test_trip3', 1);
+INSERT INTO user_trip 
+	(user_id, trip_id)
+	VALUES (1, 3);
+
 INSERT INTO trip 
 	(name, created_by, start_date, end_date)
 	VALUES ('Amerika - Testreise', 1, '2014-12-10T00:00:00.000Z', '2014-12-25T00:00:00.000Z');	
 
+
 INSERT INTO user_trip 
 	(user_id, trip_id)
-	VALUES (1, 1);
-INSERT INTO user_trip 
-	(user_id, trip_id)
-	VALUES (1, 2);
-INSERT INTO user_trip 
-	(user_id, trip_id)
-	VALUES (3, 2);
+	VALUES (3, 4);
 	
 INSERT INTO city
 	(trip_id, name, place_id, longitude, latitude)

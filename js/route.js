@@ -66,6 +66,7 @@ router.routes = [
 	new Route("/trip/:trip_id", "put", tripMgt.crud.onUpdate),
 	new Route("/trip/:trip_id", "delete", tripMgt.crud.onDelete),
 	new Route("/trip/:trip_id/*", "all", tripMgt.crud.onAll),
+	new Route("/trip/:trip_id/move", "put", tripMgt.crud.onMove),
 	new Route("/trip/:trip_id/users", "get", tripMgt.crud.onReadTripUsers),
 	new Route("/trip/:trip_id/addUser", "put", tripMgt.crud.onAddUserToTrip),
 	new Route("/trip/:trip_id/removeUser", "put", tripMgt.crud.onRemoveUserFromTrip),

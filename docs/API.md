@@ -297,6 +297,21 @@ created_on
 index
 ```
 
+#### Move trip (change index of trip, only for currently logged in user)
+```
+PUT /trip/:trip_id/move
+
+Required:
+fromIndex
+toIndex
+```
+
+Note: This API call will return 400 if:
+- fromIndex or toIndex are not numbers
+- fromIndex equals toIndex
+- fromIndex does not equal the index currently saved in the DB (for example when working with an old version in the frontend)
+
+
 #### Delete trip
 ```
 DELETE /trip/:trip_id

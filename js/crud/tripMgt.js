@@ -94,7 +94,8 @@ exports.crud.onReadUserTrips = function(req, res) {
 			  "  (SELECT COUNT(*) FROM city where city.trip_id = trip.trip_id) AS no_cities " + 	
 			  "    FROM user_trip, trip " +
 			  "    WHERE user_trip.user_id=$1 " +
-			  "      AND user_trip.trip_id = trip.trip_id; ",
+			  "      AND user_trip.trip_id = trip.trip_id " +
+			  "  ORDER BY user_trip.index",
 		values: [req.session.user.user_id] 
 	};
 	db.query(sql, function(err, result) {
@@ -108,6 +109,77 @@ exports.crud.onReadUserTrips = function(req, res) {
 		}
 	});
 };
+
+exports.crud.onMove = function(req, res) {
+	var user_id = req.session.user.user_id;
+	var trip_id = req.params.trip_id;
+	var fromIndex = req.body.fromIndex;
+	var toIndex = req.body.toIndex;
+
+	if (fromIndex == toIndex || isNaN(fromIndex) || isNaN(toIndex)) { //Bad request
+		res.status(400).end();
+		return;
+	}
+
+	var sql = { //Check if valid fromIndex to make sure frontend has non-stale data
+		text: "SELECT * FROM user_trip " +
+			  " WHERE user_id=$1" +
+			  "   AND trip_id=$2" +
+			  "   AND index=$3",
+		values: [user_id, trip_id, fromIndex]
+	};
+	db.query(sql, function(err, result) {
+		if (err) {
+			res.status(500).end();
+		}
+		else if (result.rows.length === 0)  { //Wrong fromIndex
+			res.status(400).end();
+		}
+		else {
+			completeMove(user_id, trip_id, fromIndex, toIndex, res);
+		}
+	})
+};	
+
+function completeMove(user_id, trip_id, fromIndex, toIndex, res) {
+	var sql = [];
+	if (fromIndex < toIndex) {
+		sql.push({
+			text: "UPDATE user_trip SET index=index-1 " + 
+				  " WHERE user_id=$1 "  +
+				  "   AND index>$2" +
+				  "   AND index<=$3",
+			values: [user_id, fromIndex, toIndex]
+		});
+	}
+	else {
+		sql.push({
+			text: "UPDATE user_trip SET index=index+1 " +
+				  " WHERE user_id=$1 " + 
+				  "   AND index>=$2" + 
+				  "   AND index<$3",
+			values: [user_id, toIndex, fromIndex]
+		});
+	}
+
+	sql.push({
+		text: "UPDATE user_trip SET index=$3 " + 
+			  " WHERE user_id=$1 " + 
+			  "   AND trip_id=$2",
+		values: [user_id, trip_id, toIndex]
+	});
+
+	db.query(sql, function(err, result) {
+		if (err) {
+			res.status(500).end();
+			return;
+		}
+
+		console.log("Moved trip " + trip_id + " for user " + user_id + " from " + fromIndex + " to " + toIndex);
+		res.status(200).end();
+	});
+}
+
 
 exports.crud.onReadTripUsers = function(req, res) {
 	var trip_id = req.params.trip_id;
@@ -188,7 +260,8 @@ exports.crud.onReadTripCities = function(req, res) {
 		text: "SELECT *, (SELECT COUNT(*) FROM location WHERE location.city_id = city.city_id) AS no_locations" + 
 			  " FROM trip, city" + 
 			  " WHERE trip.trip_id=$1" + 
-			  "   AND trip.trip_id=city.trip_id",
+			  "   AND trip.trip_id=city.trip_id" + 
+			  " ORDER BY city.index",
 		values: [trip_id]
 	};
 	db.query(sql, function(err, result) {

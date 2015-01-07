@@ -162,7 +162,7 @@ var updatedSampleTrip = JSON.parse(JSON.stringify(sampleTrip));
 updatedSampleTrip.name = "Updated test trip";
 
 QUnit.test("Trip tests", function(assert) {
-	assert.expect(15);
+	assert.expect(19);
 
 	var done;
 	done = assert.async();
@@ -249,6 +249,40 @@ QUnit.test("Trip tests", function(assert) {
 			assert.ok(data.length >= 1, "Should return an array of trips")
 		},
 		complete: onAsyncComplete("Trip get all for user", done)
+	});
+
+	//Try moving index of trips
+	done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/2/move",
+		data: {
+			fromIndex: 2,
+			toIndex: 3
+		},
+		complete: onAsyncComplete("Trip move (change index)", done)
+	});
+	//Check index of other trip to make sure it was changed too
+	done = assert.async();
+	$.ajax({
+		type: "GET",
+		url: "/user/1/trips",
+		success: function(data, textStatus, jqXHR) {
+			var trips = data;
+			assert.ok(data[1].index == 2 && data[1].trip_id==3, "Should have changed the index of the previously last trip")
+		},
+		complete: onAsyncComplete("Get updated index of trip", done)
+	});
+	//Move it back
+	done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/2/move",
+		data: {
+			fromIndex: 3,
+			toIndex: 2
+		},
+		complete: onAsyncComplete("Trip move (change index) back", done)
 	});
 
 	done = assert.async();
@@ -362,7 +396,7 @@ QUnit.test("City tests", function(assert) {
 		type: "GET",
 		url: "/trip/1/city/3",
 		success: function(data, textStatus, jqXHR) {
-			assert.ok(data.index == 2, "Should have changed the index of the previously first city")
+			assert.ok(data.index == 2, "Should have changed the index of the previously last city")
 		},
 		complete: onAsyncComplete("Get updated index of city", done)
 	});
@@ -489,7 +523,7 @@ QUnit.test("Location tests", function(assert) {
 		type: "GET",
 		url: "/trip/1/city/1/location/3",
 		success: function(data, textStatus, jqXHR) {
-			assert.ok(data.index == 2, "Should have changed the index of the previously first location")
+			assert.ok(data.index == 2, "Should have changed the index of the previously last location")
 		},
 		complete: onAsyncComplete("Get updated index of location", done)
 	});

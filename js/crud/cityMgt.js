@@ -13,7 +13,8 @@ exports.crud = new crud.CRUDModule("city",
 	},
 	function(city_id) {
 		return {
-			text: "SELECT * FROM city WHERE city_id=$1",
+			text: "SELECT * FROM city " +
+				  " WHERE city_id=$1",
 			values: [city_id]
 		};
 	},
@@ -115,7 +116,8 @@ exports.crud.onReadCityLocations = function(req, res) {
 	var sql = {
 		text: "SELECT * FROM city, location" +
 			  " WHERE city.city_id=$1" + 
-			  "   AND city.city_id=location.city_id",
+			  "   AND city.city_id=location.city_id" + 
+			  " ORDER BY location.index",
 		values: [city_id]
 	};
 	db.query(sql, function(err, result) {
