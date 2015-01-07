@@ -82,7 +82,8 @@ router.routes = [
 	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "all", locationMgt.crud.onAll),
 	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "get", locationMgt.crud.onRead),
 	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "put", locationMgt.crud.onUpdate),
-	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "delete", locationMgt.crud.onDelete)
+	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "delete", locationMgt.crud.onDelete),
+	new Route("/trip/:trip_id/city/:city_id/location/:location_id/move", "put", locationMgt.crud.onMove)
 ];
 
 exports.router = router;

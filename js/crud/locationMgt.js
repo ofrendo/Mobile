@@ -1,5 +1,6 @@
 var crud = require("./crud");
 var tripMgt = require("./tripMgt");
+var db = require(".././db");
 
 exports.crud = new crud.CRUDModule("location", 
 	function(location, req) {
@@ -35,6 +36,75 @@ exports.crud = new crud.CRUDModule("location",
 		};
 	}
 );
+
+
+exports.crud.onMove = function(req, res) {
+	var city_id = req.params.city_id;
+	var location_id = req.params.location_id;
+	var fromIndex = req.body.fromIndex;
+	var toIndex = req.body.toIndex;
+
+	if (fromIndex == toIndex || isNaN(fromIndex) || isNaN(toIndex)) { //Bad request
+		res.status(400).end();
+		return;
+	}
+
+	var sql = {
+		text: "SELECT * FROM location WHERE location_id=$1 AND index=$2",
+		values: [location_id, fromIndex]
+	};
+	db.query(sql, function(err, result) {
+		if (err) {
+			res.status(500).end();
+		}
+		else if (result.rows.length === 0)  { //Wrong fromIndex
+			res.status(400).end();
+		}
+		else {
+			completeMove(city_id, location_id, fromIndex, toIndex, res);
+		}
+	})
+};	
+
+
+function completeMove(city_id, location_id, fromIndex, toIndex, res) {
+	var sql = [];
+	if (fromIndex < toIndex) {
+		sql.push({
+			text: "UPDATE location SET index=index-1 " + 
+				  " WHERE city_id=$1 "  +
+				  "   AND index>$2" +
+				  "   AND index<=$3",
+			values: [city_id, fromIndex, toIndex]
+		});
+	}
+	else {
+		sql.push({
+			text: "UPDATE location SET index=index+1 " +
+				  " WHERE city_id=$1 " + 
+				  "   AND index>=$2" + 
+				  "   AND index<$3",
+			values: [city_id, toIndex, fromIndex]
+		});
+	}
+
+	sql.push({
+		text: "UPDATE location SET index=$2 " + 
+			  " WHERE location_id=$1 ",
+		values: [location_id, toIndex]
+	});
+
+	db.query(sql, function(err, result) {
+		if (err) {
+			res.status(500).end();
+			return;
+		}
+
+		console.log("Moved location " + location_id + " in city " + city_id + " from " + fromIndex + " to " + toIndex);
+		res.status(200).end();
+	});
+}
+
 
 exports.crud.onAll = function(req, res, next) {
 	var location_id = req.params.location_id;

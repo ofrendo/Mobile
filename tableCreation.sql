@@ -102,7 +102,13 @@ INSERT INTO user_trip
 	
 INSERT INTO city
 	(trip_id, name, place_id, longitude, latitude)
-	VALUES (1, 'test_city', 1234, -1, -1);
+	VALUES (1, 'test_city1 DONT REORDER', 1234, -1, -1);
+INSERT INTO city
+	(trip_id, name, place_id, longitude, latitude)
+	VALUES (1, 'test_city2 DONT REORDER', 1234, -1, -1);
+INSERT INTO city
+	(trip_id, name, place_id, longitude, latitude)
+	VALUES (1, 'test_city3 DONT REORDER', 1234, -1, -1);
 INSERT INTO city
 	(trip_id, name, place_id, longitude, latitude)
 	VALUES (2, 'Boston', 'ChIJGzE9DS1l44kRoOhiASS_fHg', -71.0600970, 42.3584865);
@@ -115,4 +121,10 @@ INSERT INTO city
 	
 INSERT INTO location
 	(city_id, name, place_id, longitude, latitude)
-	VALUES (1, 'test_location', 12345, -1, -1);
+	VALUES (1, 'test_location1 DONT REORDER', 12345, -1, -1);
+INSERT INTO location
+	(city_id, name, place_id, longitude, latitude)
+	VALUES (1, 'test_location2 DONT REORDER', 12345, -1, -1);
+INSERT INTO location
+	(city_id, name, place_id, longitude, latitude)
+	VALUES (1, 'test_location3 DONT REORDER', 12345, -1, -1);

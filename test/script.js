@@ -349,7 +349,7 @@ QUnit.test("City tests", function(assert) {
 	done = assert.async();
 	$.ajax({
 		type: "PUT",
-		url: "/trip/2/city/2/move",
+		url: "/trip/1/city/2/move",
 		data: {
 			fromIndex: 2,
 			toIndex: 3
@@ -360,7 +360,7 @@ QUnit.test("City tests", function(assert) {
 	done = assert.async();
 	$.ajax({
 		type: "GET",
-		url: "/trip/2/city/3",
+		url: "/trip/1/city/3",
 		success: function(data, textStatus, jqXHR) {
 			assert.ok(data.index == 2, "Should have changed the index of the previously first city")
 		},
@@ -370,7 +370,7 @@ QUnit.test("City tests", function(assert) {
 	done = assert.async();
 	$.ajax({
 		type: "PUT",
-		url: "/trip/2/city/2/move",
+		url: "/trip/1/city/2/move",
 		data: {
 			fromIndex: 3,
 			toIndex: 2
@@ -408,7 +408,7 @@ var updatedSampleLocation = JSON.parse(JSON.stringify(sampleLocation));
 updatedSampleLocation.name = "Updated unit test location";
 
 QUnit.test("Location tests", function(assert) {
-	assert.expect(11);
+	assert.expect(15);
 
 	var done;
 	done = assert.async();
@@ -470,6 +470,39 @@ QUnit.test("Location tests", function(assert) {
 			assert.ok(data.location_id == sampleLocation.location_id, "Should return the correct location")
 		},
 		complete: onAsyncComplete("Location get", done)
+	});
+
+	//Try moving index of locations
+	done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/1/city/1/location/2/move",
+		data: {
+			fromIndex: 2,
+			toIndex: 3
+		},
+		complete: onAsyncComplete("Location move (change index)", done)
+	});
+	//Check index of other location to make sure it was changed too
+	done = assert.async();
+	$.ajax({
+		type: "GET",
+		url: "/trip/1/city/1/location/3",
+		success: function(data, textStatus, jqXHR) {
+			assert.ok(data.index == 2, "Should have changed the index of the previously first location")
+		},
+		complete: onAsyncComplete("Get updated index of location", done)
+	});
+	//Move it back
+	done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/1/city/1/location/2/move",
+		data: {
+			fromIndex: 3,
+			toIndex: 2
+		},
+		complete: onAsyncComplete("Location move (change index) back", done)
 	});
 
 	done = assert.async();
