@@ -117,6 +117,7 @@ exports.crud.onMove = function(req, res) {
 	var toIndex = req.body.toIndex;
 
 	if (fromIndex == toIndex || isNaN(fromIndex) || isNaN(toIndex)) { //Bad request
+		console.log("Invalid fromIndex/toIndex");
 		res.status(400).end();
 		return;
 	}
@@ -133,6 +134,7 @@ exports.crud.onMove = function(req, res) {
 			res.status(500).end();
 		}
 		else if (result.rows.length === 0)  { //Wrong fromIndex
+			console.log("Wrong fromIndex, no db entry found");
 			res.status(400).end();
 		}
 		else {
