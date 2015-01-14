@@ -49,7 +49,7 @@ exports.onCreateUser = function(req, res) { //called on register
 			exports.crud.onCreate(req, res);
 		}
 		else if (result.confirmed == false) { //User exists already and has not been confirmed
-			exports.crud.onUpdate(req, res);
+			exports.crud.onUpdate(req, res, true);
 		}
 		else {
 			res.status(403).end();
