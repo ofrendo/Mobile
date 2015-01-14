@@ -19,7 +19,7 @@ exports.crud = new crud.CRUDModule("user",
 			values: [user_id]
 		};
 	},
-	function(user, req) {
+	function(user, req, user_id) {
 		return {
 			text: "UPDATE users SET email=$1, phone=$2, username=$3, password=crypt($4, password), name=$5, confirmed=true " +
 				  " WHERE user_id=$6 " + 
@@ -49,7 +49,22 @@ exports.onCreateUser = function(req, res) { //called on register
 			exports.crud.onCreate(req, res);
 		}
 		else if (result.confirmed == false) { //User exists already and has not been confirmed
-			exports.crud.onUpdate(req, res, true);
+			var sql = {
+				text: "UPDATE users SET email=$1, phone=$2, username=$3, password=crypt($4, password), name=$5, confirmed=true " +
+					  " WHERE user_id=$6 " + 
+					  " RETURNING user_id, email, phone, username, name",
+				values: [user.email, user.phone, user.username, user.password, user.name, result.user_id]
+			};
+			db.query(sql, function(err, result) {
+				if (err) {
+					console.log("Error during confirming a user");
+					res.status(500).end();
+				}
+				else {
+					user.user_id = result.user_id;
+					res.send(user);
+				}
+			})
 		}
 		else {
 			res.status(403).end();
