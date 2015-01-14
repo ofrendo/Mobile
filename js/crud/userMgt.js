@@ -6,6 +6,8 @@ var sessionMgt = require(".././sessionMgt");
 
 exports.crud = new crud.CRUDModule("user",
 	function(user) {
+		console.log("OnCreate user password:");
+		console.log(user.password);
 		return {
 			text: "INSERT INTO users (email, phone, username, password, name) " +
 				  " VALUES($1, $2, $3, crypt($4, gen_salt('bf', 8)), $5) " + 
@@ -21,8 +23,8 @@ exports.crud = new crud.CRUDModule("user",
 	},
 	function(user, req, user_id) {
 		return {
-			text: "UPDATE users SET email=$1, phone=$2, username=$3, password=crypt($4, password), name=$5, confirmed=true " +
-				  " WHERE user_id=$6 " + 
+			text: "UPDATE users SET email=$1, phone=$2, username=$3, password=crypt($4, gen_salt('bf', 8)), name=$5, confirmed=true " +
+				  " WHERE user_id=$6 AND password=crypt($4, password)" + 
 				  " RETURNING user_id, email, phone, username, name",
 			values: [user.email, user.phone, user.username, user.password, user.name, req.params.user_id]
 		};
@@ -50,19 +52,24 @@ exports.onCreateUser = function(req, res) { //called on register
 		}
 		else if (result.confirmed == false) { //User exists already and has not been confirmed
 			var sql = {
-				text: "UPDATE users SET email=$1, phone=$2, username=$3, password=crypt($4, password), name=$5, confirmed=true " +
-					  " WHERE user_id=$6 " + 
+				text: "UPDATE users SET email=$1, phone=$2, username=$3, password=crypt($4, gen_salt('bf', 8)), name=$5, confirmed=true " +
+					  " WHERE user_id=$6" + 
 					  " RETURNING user_id, email, phone, username, name",
 				values: [user.email, user.phone, user.username, user.password, user.name, result.user_id]
 			};
 			db.query(sql, function(err, result) {
 				if (err) {
 					console.log("Error during confirming a user");
+					console.log(err);
 					res.status(500).end();
 				}
+				else if (result.rows.length == 0) {
+					res.status(400).end();
+				}
 				else {
-					user.user_id = result.user_id;
-					res.send(user);
+					user.user_id = result.rows[0].user_id;
+					sessionMgt.setUser(req, user);
+					res.send({"user_id": result.rows[0].user_id});
 				}
 			})
 		}
