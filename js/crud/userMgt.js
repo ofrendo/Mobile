@@ -68,10 +68,7 @@ exports.crud.beforeSendRead = function(req, res, user) {
 	delete user["password"];
 }
 exports.crud.beforeSQLCheckUpdate = function(req, res, user) {
-	return req.session.user.user_id == user.user_id;
-}
-exports.crud.beforeSendUpdate = function(req, res, user) {
-	delete user["password"];
+	return req.session.user.user_id == user.user_id && user.password !== "";
 }
 exports.crud.beforeSendDelete = function(req, res) {
 	sessionMgt.doLogout(req, res);
