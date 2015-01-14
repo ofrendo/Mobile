@@ -87,7 +87,7 @@ exports.CRUDModule = function(objectName, getSqlCreate, getSqlRead, getSqlUpdate
 	}
 	this.onUpdate = function(req, res) {
 		if (typeof(self.beforeSQLCheckUpdate) == "function") {
-			if (self.beforeSQLCheckUpdate(req, res, req.body[objectName]) == false) {
+			if (self.beforeSQLCheckUpdate(req, res, req.body[self.objectName]) == false) {
 				res.status(403).send({message: "Forbidden"});
 				return;
 			}
