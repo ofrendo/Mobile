@@ -4,13 +4,7 @@ var db = require(".././db");
 
 exports.crud = new crud.CRUDModule("location", 
 	function(location, req) {
-		return {
-			text: "INSERT INTO location" +
-				  " (city_id, name, place_id, category, longitude, latitude, start_date, end_date)" +
-				  " VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING location_id",
-			values: [req.params.city_id, location.name, location.place_id, location.category, location.longitude,
-					 location.latitude, location.start_date, location.end_date]
-		};
+		return buildSqlInsert(location, req);
 	},
 	function(location_id) {
 		return {
@@ -38,6 +32,40 @@ exports.crud = new crud.CRUDModule("location",
 	}
 );
 
+function buildSqlInsert(location, req) {
+	return {
+		text: "INSERT INTO location" +
+			  " (city_id, name, place_id, category, longitude, latitude, start_date, end_date)" +
+			  " VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING location_id",
+		values: [req.params.city_id, location.name, location.place_id, location.category, location.longitude,
+				 location.latitude, location.start_date, location.end_date]
+	};
+}
+
+exports.crud.onCreateLocation = function(req, res) {
+	if (req.body.locations instanceof Array) {
+		//Means multiple locations have been passed in for creation
+		var queries = [];
+		for (var i = 0; i < req.body.locations.length; i++) {
+			var location = req.body.locations[i];
+			queries.push(buildSqlInsert(location, req));
+		}
+		db.query(queries, function(err, result) {
+			if (err) {
+				console.log("Error creating multiple locations:");
+				console.log(err),
+				res.status(500).end();
+			}
+			else {
+				res.status(200).end();
+			}
+		})
+	}
+	else {
+		//Means only one location to be created
+		exports.crud.onCreate(req, res);
+	}
+};
 
 exports.crud.onMove = function(req, res) {
 	var city_id = req.params.city_id;
@@ -56,6 +84,8 @@ exports.crud.onMove = function(req, res) {
 	};
 	db.query(sql, function(err, result) {
 		if (err) {
+			console.log("Error moving location:");
+			console.log(err);
 			res.status(500).end();
 		}
 		else if (result.rows.length === 0)  { //Wrong fromIndex

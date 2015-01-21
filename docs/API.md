@@ -436,7 +436,8 @@ Status codes:
 - 403: Trying to read/update/delete a forbidden trip, for example trying to read from another user
 - 500: Internal server error
 
-#### Create location
+#### Create location(s)
+The following objects may also be stored in an array `locations`, thus making it possible to create multiple locations with one call.
 ```
 POST /trip/:trip_id/city/:city_id/location
 

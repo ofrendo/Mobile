@@ -442,7 +442,7 @@ var updatedSampleLocation = JSON.parse(JSON.stringify(sampleLocation));
 updatedSampleLocation.name = "Updated unit test location";
 
 QUnit.test("Location tests", function(assert) {
-	assert.expect(15);
+	assert.expect(16);
 
 	var done;
 	done = assert.async();
@@ -470,7 +470,7 @@ QUnit.test("Location tests", function(assert) {
 		complete: onAsyncComplete("Get locations for test city", done)
 	});
 
-	//Use test trip with id=1 as parent
+	//Use test city with id=1 as parent
 	done = assert.async();
 	$.ajax({
 		type: "POST",
@@ -482,6 +482,14 @@ QUnit.test("Location tests", function(assert) {
 			updatedSampleLocation.location_id = data.location_id;
 		},
 		complete: onAsyncComplete("Create location", done)
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "POST",
+		url: "/trip/1/city/1/location",
+		data: {locations: [sampleLocation, sampleLocation, sampleLocation]},
+		complete: onAsyncComplete("Create mulitple locations", done)
 	});
 
 	var done = assert.async();
