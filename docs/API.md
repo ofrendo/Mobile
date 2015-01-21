@@ -160,6 +160,15 @@ Status codes:
 - 403: Forbidden, trying to access update other user
 - 404: Not found
 
+#### Update user password
+```
+PUT /user/:user_id/changePassword
+
+Required: 
+password
+```
+
+
 #### Delete user
 ```
 DELETE /user/:user_id

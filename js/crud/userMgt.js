@@ -208,6 +208,26 @@ exports.onLogin = function(req, res) { //login
 	}
 };
 
+exports.crud.onChangePassword = function(req, res) {
+	console.log("Changing user password...");
+	var newPassword = req.body.password;
+	var sql = {
+		text: "UPDATE users SET password=crypt($1, gen_salt('bf', 8)) " + 
+			  " WHERE user_id=$2",
+		values: [newPassword, req.session.user.user_id]
+	};
+	db.query(sql, function(err, result) {
+		if (err) {
+			console.log("Error changing user password");
+			console.log(err);
+			res.status(500).end();
+		}
+		else {
+			res.status(200).end();
+		}
+	});
+}
+
 exports.onLogout = function(req, res) { //logout
 	sessionMgt.doLogout(req);
 	res.status(200).send("");

@@ -13,7 +13,7 @@ $.ajaxSetup({
 });
 
 QUnit.test("User tests", function(assert) {
-	assert.expect(8);
+	assert.expect(9);
 
 	var done;
 	done = assert.async();
@@ -63,7 +63,15 @@ QUnit.test("User tests", function(assert) {
 			sampleUser = data;
 		},
 		complete: onAsyncComplete("User update info", done)
-	})
+	});
+
+	done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/user/" + sampleUser.user_id + "/changePassword",
+		data: {password: "newPassword"},
+		complete: onAsyncComplete("User update password", done)
+	});
 
 	done = assert.async();
 	$.ajax({

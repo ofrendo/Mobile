@@ -56,6 +56,7 @@ router.routes = [
 	new Route("/user/:user_id", "all", userMgt.crud.onAll),
 	new Route("/user/:user_id", "get", userMgt.crud.onRead),
 	new Route("/user/:user_id", "put", userMgt.crud.onUpdate),	
+	new Route("/user/:user_id/changePassword", "put", userMgt.crud.onChangePassword),
 	new Route("/user/:user_id", "delete", userMgt.crud.onDelete),
 	new Route("/user/:user_id/trips", "get", tripMgt.crud.onReadUserTrips),
 	new Route("/trip", "post", sessionMgt.onCheckSession),
