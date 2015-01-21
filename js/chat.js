@@ -20,7 +20,7 @@ var onConnect = function(socket) {
 			socket.disconnect();
 		}
 		else {
-			console.log("User had a valid session.");
+			console.log("User " + session.user.username + " had a valid session.");
 			socket.user = session.user;
 			socket.user.emailMD5 = utils.md5(socket.user.email);
 			delete socket.user["email"];

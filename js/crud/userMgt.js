@@ -186,7 +186,7 @@ function doLogin(username, password, callback) {
 	db.query(sql, callback);
 }
 exports.onLogin = function(req, res) { //login
-	if (sessionMgt.isLoggedIn(req)) {
+	if (sessionMgt.isLoggedIn(req) && !req.body.username && !req.body.password) {
 		//Already logged in
 		console.log("User already logged in.");
 		res.status(200).send(req.session.user);
