@@ -23,10 +23,10 @@ exports.crud = new crud.CRUDModule("user",
 	},
 	function(user, req, user_id) {
 		return {
-			text: "UPDATE users SET email=$1, phone=$2, username=$3, password=crypt($4, gen_salt('bf', 8)), name=$5, confirmed=true " +
-				  " WHERE user_id=$6 AND password=crypt($4, password)" + 
+			text: "UPDATE users SET email=$1, phone=$2, name=$3 " +
+				  " WHERE user_id=$4" + 
 				  " RETURNING user_id, email, phone, username, name",
-			values: [user.email, user.phone, user.username, user.password, user.name, req.params.user_id]
+			values: [user.email, user.phone, user.name, req.session.user.user_id]
 		};
 	},
 	function(user_id) {
