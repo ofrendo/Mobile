@@ -209,8 +209,9 @@ exports.onLogin = function(req, res) { //login
 };
 
 exports.crud.onChangePassword = function(req, res) {
-	console.log("Changing user password...");
 	var newPassword = req.body.password;
+	console.log("Changing user password: " + newPassword);
+
 	var sql = {
 		text: "UPDATE users SET password=crypt($1, gen_salt('bf', 8)) " + 
 			  " WHERE user_id=$2",
