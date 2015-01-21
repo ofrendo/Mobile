@@ -389,6 +389,15 @@ created_on
 index
 ```
 
+#### Change indexes of all locations for given city, to be used during optimization
+```
+PUT /trip/:trip_id/city/:city_id/changeLocationIndexes
+
+Required (.locations array):
+newIndex
+location_id
+```
+
 #### Update city
 ```
 PUT /trip/:trip_id/city/:city_id

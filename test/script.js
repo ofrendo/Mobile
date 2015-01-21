@@ -450,7 +450,7 @@ var updatedSampleLocation = JSON.parse(JSON.stringify(sampleLocation));
 updatedSampleLocation.name = "Updated unit test location";
 
 QUnit.test("Location tests", function(assert) {
-	assert.expect(16);
+	assert.expect(17);
 
 	var done;
 	done = assert.async();
@@ -476,6 +476,26 @@ QUnit.test("Location tests", function(assert) {
 			assert.ok(data.length >= 0, "locations for test city should be an array");
 		},
 		complete: onAsyncComplete("Get locations for test city", done)
+	});
+
+	//Change indexes of locations
+	done = assert.async();
+	$.ajax({
+		type: "PUT",
+		url: "/trip/1/city/1/changeLocationIndexes",
+		data: {locations: [{
+			location_id: 1,
+			newIndex: 1
+		},
+		{
+			location_id: 2,
+			newIndex: 2
+		},
+		{
+			location_id: 3,
+			newIndex: 3
+		}]},
+		complete: onAsyncComplete("Update indexes on locations for city", done)
 	});
 
 	//Use test city with id=1 as parent

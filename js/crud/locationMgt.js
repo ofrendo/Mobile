@@ -67,6 +67,30 @@ exports.crud.onCreateLocation = function(req, res) {
 	}
 };
 
+exports.crud.onChangeLocationIndexes = function(req, res) {
+	var changedLocations = req.body.locations;
+	var queries = [];
+	for (var i = 0; i < changedLocations.length; i++) {
+		queries.push({
+			text: "UPDATE location " + 
+			      "   SET index=$1" + 
+			      " WHERE location_id=$2",
+			values: [parseInt(changedLocations[i].newIndex), parseInt(changedLocations[i].location_id)]
+		});
+		console.log(queries[i]);
+	}
+	db.query(queries, function(err, result) {
+		if (err) {
+			console.log("Error during changing location indexes");
+			console.log(err),
+			res.status(500).end();
+		}
+		else {
+			res.status(200).end();
+		}
+	});	
+}
+
 exports.crud.onMove = function(req, res) {
 	var city_id = req.params.city_id;
 	var location_id = req.params.location_id;

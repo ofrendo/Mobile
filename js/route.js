@@ -80,6 +80,7 @@ router.routes = [
 	new Route("/trip/:trip_id/city/:city_id/*", "all", cityMgt.crud.onAll),
 	new Route("/trip/:trip_id/city/:city_id/move", "put", cityMgt.crud.onMove),
 	new Route("/trip/:trip_id/city/:city_id/locations", "get", cityMgt.crud.onReadCityLocations),
+	new Route("/trip/:trip_id/city/:city_id/changeLocationIndexes", "put", locationMgt.crud.onChangeLocationIndexes),
 	new Route("/trip/:trip_id/city/:city_id/location", "post", locationMgt.crud.onCreateLocation),
 	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "all", locationMgt.crud.onAll),
 	new Route("/trip/:trip_id/city/:city_id/location/:location_id", "get", locationMgt.crud.onRead),
