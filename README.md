@@ -16,6 +16,9 @@ Mobile Projekt 5. Semester: Backend repository
     - [Git Guide](#gitGuide)
 
 # <a name="backendInfos"></a>Backend Infos
+In diesem Repository befindet sich der Code für das Backend. Dabei wird ein NodeJS Server verwendet, der entweder lokal oder auf einem Anbieter wie [Heroku](https://thawing-stream-4939.herokuapp.com/) laufen kann. Für die persistente Speicherung von Daten wird eine PostgreSQL Datenbank verwendet. Ziel des Servers ist es, über eine [REST API](https://github.com/ofrendo/Mobile/blob/master/docs/API.md) eine einfache und sichere Schnittstelle für das [Frontend](https://github.com/ofrendo/Mobile-fe) zur Verfügung zu stellen.
+
+
 ## <a name="vorErstemLaufen"></a>Vor erstem Laufen (lokal)
 Node Module installieren:
 ```
@@ -50,7 +53,7 @@ Nützliche Postgres Befehle:
 Serverdaten kopieren:
 PGUSER=postgres PGPASSWORD={ausgesuchtesPW} heroku pg:pull HEROKU_POSTGRESQL_AMBER localDB --app thawing-stream-4939
 
-Lokal Tabellen erstellen:
+Lokal Tabellen erstellen (alte Daten gehen verloren!):
 PGUSER=postgres PGPASSWORD={ausgesuchtesPW} psql -d "{Datenbankname}" -a -f tableCreation.sql 
 
 \list [Liste Datenbanken]
@@ -64,7 +67,7 @@ PGUSER=postgres PGPASSWORD={ausgesuchtesPW} psql -d "{Datenbankname}" -a -f tabl
     - [GIT.md](https://github.com/ofrendo/Mobile/blob/master/docs/GIT.md): Git Guide
 - js
     - crud
-        - crud.js: Modul zur einheitlichen Datenbankabfrage. Für POST/GET/PUT/DELETE Anfragen
+        - crud.js: Modul zur Datenbankabfrage. Für `post`/`get`/`put`/`delete` Anfragen
         - cityMgt.js: City API Calls
         - locationMgt.js: Location API Calls
         - tripMgt.js: Trip API Calls
