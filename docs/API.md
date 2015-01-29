@@ -1,6 +1,6 @@
 This page lists the API calls that can be made to the backend.
 
-## Table of Contents
+## Inhaltsverzeichnis
 - [Session management](#sessionManagement)
     - [Login](#login)
     - [Logout](#logout)

@@ -1,15 +1,28 @@
-Mobile Projekt 5. Semester
+Mobile Projekt 5. Semester: Backend repository
 ======
 
-# Backend Infos
-## Vor erstem Laufen (lokal)
-Module installieren:
+## Inhaltsverzeichnis
+- [Backend Infos](#backendInfos)
+    - [Vor erstem Laufen (lokal)](#vorErstemLaufen)
+    - [Datenbank (PostgreSQL)](#datenbank)
+    - [Lokal laufen lassen](#lokalLaufenLassen)
+- [Andere Infos](#andereInfos)
+    - [API Calls](#apiCalls)
+    - [Frontend Github Repo](#frontendGithubRepo)
+    - [ER Modell](#erModell)
+    - [Google Docs Sammlung von Ideen](#ideen)
+    - [Mockups](#mockups)
+    - [Git Guide](#gitGuide)
+
+# <a name="backendInfos"></a>Backend Infos
+## <a name="vorErstemLaufen"></a>Vor erstem Laufen (lokal)
+Node Module installieren:
 ```
 cd mobile
 npm install
 ```
 
-## Datenbank (PostgreSQL)
+## <a name="datenbank"></a>Datenbank (PostgreSQL)
 PostgreSQL Studio im Heroku:
 https://us-east1.postgresqlstudio.com/pgstudio/Heroku.jsp?app=thawing-stream-4939&addon=pgstudio
 
@@ -25,7 +38,7 @@ Einmal im PostgreSQL:
 CREATION EXTENSION pgcrypto
 ```
 
-## Lokal laufen lassen
+## <a name="lokalLaufenLassen"></a>Lokal laufen lassen
 ```
 cd mobile
 node index.js
@@ -44,21 +57,21 @@ PGUSER=postgres PGPASSWORD={ausgesuchtesPW} psql -d "{Datenbankname}" -a -f tabl
 \dt [Liste Tabellen in Datenbank]
 ```
 
-# Andere Infos 
-## API Calls
+# <a name="andereInfos"></a>Andere Infos 
+## <a name="apiCalls"></a>API Calls
 https://github.com/ofrendo/Mobile/blob/master/docs/API.md
 
-## Frontend Github Repo
+## <a name="frontendGithubRepo"></a>Frontend GitHub Repository
 https://github.com/ofrendo/Mobile-fe
 
-## ER Modell
+## <a name="erModell"></a>ER Modell
 https://drive.draw.io/#G0B6C1YWgoE658bjFZQTh2b3ZOejQ
 
-## Google Docs Sammlung von Ideen:
+## <a name="ideen"></a>Google Docs Sammlung von Ideen
 https://docs.google.com/document/d/1wqhUEl61v_4DUfruozFuAm6QYn54y0OggV536aWGpmk/edit#
 
-## Mockups
+## <a name="mockups"></a>Mockups
 https://www.fluidui.com/editor/live/preview/p_zW5eZMINKgiua1atXO9TQJ4MfGmnfQoR.1416922721797
 
-## Git Guide
+## <a name="gitGuide"></a>Git Guide
 https://github.com/ofrendo/Mobile/blob/master/docs/GIT.md
