@@ -5,12 +5,11 @@ Mobile Projekt 5. Semester
 ## Vor erstem Laufen (lokal)
 Module installieren:
 ```
-npm install express (Express framework)
-npm install pg (Postgress module)
-npm install socket.io (Websockets module)
+cd mobile
+npm install
 ```
 
-## SQL Zeugs
+## Datenbank (PostgreSQL)
 PostgreSQL Studio im Heroku:
 https://us-east1.postgresqlstudio.com/pgstudio/Heroku.jsp?app=thawing-stream-4939&addon=pgstudio
 
@@ -18,7 +17,7 @@ Postgres installieren. Im Git Bash:
 ```
 heroku pg:psql (verbindet mit Heroku PSQL)
 
-Lokal (vor jedem Laufen?):
+Lokal (vor jedem Laufen):
 export DATABASE_URL=postgres:///$(whoami)
 PGUSER=postgres PGPASSWORD={ausgesuchtesPW} psql
 
@@ -28,13 +27,13 @@ CREATION EXTENSION pgcrypto
 
 ## Lokal laufen lassen
 ```
-cd mobile (ins richtige dir wechseln)
-foreman start web
+cd mobile
+node index.js
 ```
 
 Nützliche Postgres Befehle:
 ```
-Serverdaten kopieren (funktioniert nicht?):
+Serverdaten kopieren:
 PGUSER=postgres PGPASSWORD={ausgesuchtesPW} heroku pg:pull HEROKU_POSTGRESQL_AMBER localDB --app thawing-stream-4939
 
 Lokal Tabellen erstellen:
@@ -46,20 +45,20 @@ PGUSER=postgres PGPASSWORD={ausgesuchtesPW} psql -d "{Datenbankname}" -a -f tabl
 ```
 
 # Andere Infos 
+## API Calls
+https://github.com/ofrendo/Mobile/blob/master/docs/API.md
+
+## Frontend Github Repo
+https://github.com/ofrendo/Mobile-fe
+
 ## ER Modell
 https://drive.draw.io/#G0B6C1YWgoE658bjFZQTh2b3ZOejQ
 
 ## Google Docs Sammlung von Ideen:
 https://docs.google.com/document/d/1wqhUEl61v_4DUfruozFuAm6QYn54y0OggV536aWGpmk/edit#
 
-## Frontend Github Repo
-https://github.com/ofrendo/Mobile-fe
-
 ## Mockups
 https://www.fluidui.com/editor/live/preview/p_zW5eZMINKgiua1atXO9TQJ4MfGmnfQoR.1416922721797
 
 ## Git Guide
 https://github.com/ofrendo/Mobile/blob/master/docs/GIT.md
-
-## API Calls
-https://github.com/ofrendo/Mobile/blob/master/docs/API.md

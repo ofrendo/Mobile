@@ -1,8 +1,7 @@
-# API Calls
-These are the API calls that can be made to the backend.
+This page lists the API calls that can be made to the backend.
 
-## Session management
-#### Login
+## <a name="sessionMgt"></a> Session management
+#### <a name="login"></a>Login
 ```
 POST /auth/login
 
@@ -41,7 +40,7 @@ Status codes:
 - 200: OK
 - 400: Error during login
 
-#### Logout
+#### <a name="logout"></a>Logout
 ```
 POST /auth/logout
 ```
@@ -95,7 +94,7 @@ Status codes:
 - 500: User exists already or internal server error
 
 
-#### Get user data
+#### <a name="getUserData"></a>Get user data
 ```
 GET /user/:user_id
 
@@ -115,7 +114,7 @@ Status codes:
 - 404: Not found
 
 
-#### Get user trips
+#### <a name="getUserTrips"></a>Get user trips
 ```
 GET /user/:user_id/trips
 
@@ -131,7 +130,7 @@ no_participants
 no_cities
 ```
 
-#### Update user
+#### <a name="updateUser"></a>Update user
 ```
 PUT /user/:user_id
 
@@ -169,7 +168,7 @@ password
 ```
 
 
-#### Delete user
+#### <a name="deleteUser"></a>Delete user
 ```
 DELETE /user/:user_id
 ```
