@@ -1,46 +1,45 @@
 This page lists the API calls that can be made to the backend.
 
-**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
-
+## Table of Contents
 - [Session management](#sessionManagement)
-		- [Login](#login)
-		- [Logout](#logout)
+    - [Login](#login)
+    - [Logout](#logout)
 - [Unit testing](#unitTesting)
 - [User](#user)
-		- [Creating a user](#createUser)
-		- [Get user data](#getUserData)
-		- [Get user trips](#getUserTrips)
-		- [Update user](#updateUser)
-		- [Update user password](#updateUserPassword)
-		- [Delete user](#deleteUser)
+    - [Creating a user](#createUser)
+    - [Get user data](#getUserData)
+    - [Get user trips](#getUserTrips)
+    - [Update user](#updateUser)
+    - [Update user password](#updateUserPassword)
+    - [Delete user](#deleteUser)
 - [Trip](#trip)
-		- [Create a trip](#createTrip)
-		- [Get trip data](#getTripData)
-		- [Get list of users for trip](#getListOfUsersForTrip)
-		- [Add user to trip](#addUserToTrip)
-		- [Delete user from trip](#deleteUserFromTrip)
-		- [Get list of cities for trip](#getListOfCitiesForTrip)
-		- [Update trip](#updateTrip)
-		- [Move trip (change index of trip, only for currently logged in user)](#moveTrip)
-		- [Delete trip](#deleteTrip)
-- [City](#)
-		- [Create city](#)
-		- [Get city](#)
-		- [Get list of locations for city](#)
-		- [Change indexes of all locations for given city, to be used during optimization](#)
-		- [Update city](#)
-		- [Move city (change index of city)](#)
-		- [Delete city](#)
-- [Location](#)
-		- [Create location(s)](#)
-		- [Get location](#)
-		- [Update location](#)
-		- [Move location (change index of location)](#)
-		- [Delete location](#)
-- [WebSocket chat](#)
-		- [Message structure](#)
-		- [Emitting events](#)
-		- [Reacting to events](#)
+    - [Create a trip](#createTrip)
+    - [Get trip data](#getTripData)
+    - [Get list of users for trip](#getListOfUsersForTrip)
+    - [Add user to trip](#addUserToTrip)
+    - [Delete user from trip](#deleteUserFromTrip)
+    - [Get list of cities for trip](#getListOfCitiesForTrip)
+    - [Update trip](#updateTrip)
+    - [Move trip (change index of trip, only for currently logged in user)](#moveTrip)
+    - [Delete trip](#deleteTrip)
+- [City](city)
+    - [Create city](createCity)
+    - [Get city](getCity)
+    - [Get list of locations for city](#getListOfLocationForCity)
+    - [Change indexes of all locations for given city, to be used during optimization](#changeIndexes)
+    - [Update city](#updateCity)
+    - [Move city (change index of city)](#moveCity)
+    - [Delete city](#deleteCity)
+- [Location](#location)
+    - [Create location(s)](#createLocation)
+    - [Get location](#getLocation)
+    - [Update location](#updateLocation)
+    - [Move location (change index of location)](#moveLocation)
+    - [Delete location](#deleteLocation)
+- [WebSocket chat](#websocketChat)
+    - [Message structure](#messageStructure)
+    - [Emitting events](#emittingEvents)
+    - [Reacting to events](#reactingToEvents)
 
 ## <a name="sessionManagement"></a>Session management
 #### <a name="login"></a>Login
@@ -367,7 +366,7 @@ Note: This API call will return 400 if:
 DELETE /trip/:trip_id
 ```
 
-## City
+## <a name="city"></a>City
 All calls described here require a user to be logged in.
 
 Status codes:
@@ -377,7 +376,7 @@ Status codes:
 - 403: Trying to read/update/delete a forbidden trip, for example trying to read from another user
 - 500: Internal server error
 
-#### Create city
+#### <a name="createCity"></a>Create city
 ```
 POST /trip/:trip_id/city
 
@@ -396,7 +395,7 @@ Returns:
 city_id
 ```
 
-#### Get city
+#### <a name="getCity"></a>Get city
 ```
 GET /trip/:trip_id/city/:city_id
 
@@ -412,7 +411,7 @@ end_date
 index
 ```
 
-#### Get list of locations for city
+#### <a name="getListOfLocationsForCity"></a>Get list of locations for city
 ```
 GET /trip/:trip_id/city/:city_id/locations
 
@@ -430,7 +429,7 @@ created_on
 index
 ```
 
-#### Change indexes of all locations for given city, to be used during optimization
+#### <a name="changeIndexes"></a>Change indexes of all locations for given city, to be used during optimization
 ```
 PUT /trip/:trip_id/city/:city_id/changeLocationIndexes
 
@@ -466,7 +465,7 @@ end_date
 index
 ```
 
-#### Move city (change index of city)
+#### <a name="moveCity"></a>Move city (change index of city)
 ```
 PUT /trip/:trip_id/city/:city_id/move
 
@@ -480,12 +479,12 @@ Note: This API call will return 400 if:
 - fromIndex equals toIndex
 - fromIndex does not equal the index currently saved in the DB (for example when working with an old version in the frontend)
 
-#### Delete city
+#### <a name="deleteCity"></a>Delete city
 ```
 DELETE /trip/:trip_id/city/:city_id
 ```
 
-## Location
+## <a name="location"></a>Location
 All calls described here require a user to be logged in.
 
 Status codes:
@@ -495,7 +494,7 @@ Status codes:
 - 403: Trying to read/update/delete a forbidden trip, for example trying to read from another user
 - 500: Internal server error
 
-#### Create location(s)
+#### <a name="createLocation"></a>Create location(s)
 The following objects may also be stored in an array `locations`, thus making it possible to create multiple locations with one call.
 ```
 POST /trip/:trip_id/city/:city_id/location
@@ -516,7 +515,7 @@ Returns:
 location_id
 ```
 
-#### Get location
+#### <a name="getLocation"></a>Get location
 ```
 GET /trip/:trip_id/city/:city_id/location/:location_id
 
@@ -533,7 +532,7 @@ end_date
 index
 ```
 
-#### Update location
+#### <a name="updateLocation"></a>Update location
 ```
 PUT /trip/:trip_id/city/:city_id/location/:location_id
 
@@ -562,7 +561,7 @@ end_date
 index
 ```
 
-#### Move location (change index of location)
+#### <a name="moveLocation"></a>Move location (change index of location)
 ```
 PUT /trip/:trip_id/city/:city_id/location/:location_id/move
 
@@ -576,14 +575,14 @@ Note: This API call will return 400 if:
 - fromIndex equals toIndex
 - fromIndex does not equal the index currently saved in the DB (for example when working with an old version in the frontend)
 
-#### Delete location
+#### <a name="deleteLocation"></a>Delete location
 ```
 DELETE /trip/:trip_id/city/:city_id/location/:location_id
 ```
 
 
 
-## WebSocket chat
+## <a name="websocketChat"></a>WebSocket chat
 The library `socket.io` is used for the WebSocket connection. The chat is room based, which means each trip has its own room. A user can only join one room at a time. In order to connect:
 ```
 //Can also use http://localhost:5000 if using the local server
@@ -592,7 +591,7 @@ var socket = io.connect(url);
 ```
 
 
-#### Message structure
+#### <a name="messageStructure"></a>Message structure
 Each message has the following structure:
 ```
 message.user_id
@@ -606,7 +605,7 @@ message.created_on
 
 
 
-#### Emitting events
+#### <a name="emittingEvents"></a>Emitting events
 These are the events that the client can emit to the server.
 ```
 //Call this to join a room for a given trip_id
@@ -626,7 +625,7 @@ socket.emit("msg.send", {msg_text: text});
 
 
 
-#### Reacting to events
+#### <a name="reactingToEvents"></a>Reacting to events
 These are the events that the server will emit to the client. 
 
 ```
