@@ -1,6 +1,48 @@
 This page lists the API calls that can be made to the backend.
 
-## <a name="sessionMgt"></a> Session management
+**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
+
+- [Session management](sessionManagement)
+		- [Login](login)
+		- [Logout](logout)
+- [Unit testing](unitTesting)
+- [User](user)
+		- [Creating a user](createUser)
+		- [Get user data](getUserData)
+		- [Get user trips](getUserTrips)
+		- [Update user](updateUser)
+		- [Update user password](updateUserPassword)
+		- [Delete user](deleteUser)
+- [Trip](trip)
+		- [Create a trip](createTrip)
+		- [Get trip data](getTripData)
+		- [Get list of users for trip](getListOfUsersForTrip)
+		- [Add user to trip](addUserToTrip)
+		- [Delete user from trip](deleteUserFromTrip)
+		- [Get list of cities for trip](getListOfCitiesForTrip)
+		- [Update trip](updateTrip)
+		- [Move trip (change index of trip, only for currently logged in user)](moveTrip)
+		- [Delete trip](deleteTrip)
+- [City](#)
+		- [Create city](#)
+		- [Get city](#)
+		- [Get list of locations for city](#)
+		- [Change indexes of all locations for given city, to be used during optimization](#)
+		- [Update city](#)
+		- [Move city (change index of city)](#)
+		- [Delete city](#)
+- [Location](#)
+		- [Create location(s)](#)
+		- [Get location](#)
+		- [Update location](#)
+		- [Move location (change index of location)](#)
+		- [Delete location](#)
+- [WebSocket chat](#)
+		- [Message structure](#)
+		- [Emitting events](#)
+		- [Reacting to events](#)
+
+## <a name="sessionManagement"></a>Session management
 #### <a name="login"></a>Login
 ```
 POST /auth/login
@@ -48,11 +90,11 @@ POST /auth/logout
 Status codes:
 - 200: Successful logout
 
-## Unit testing
-Open `/test` in a browser.
+## <a name="unitTesting"></a>Unit testing
+Open `/test` in a browser, this will run through every API call once. 
 
-## User
-#### Creating a user
+## <a name="user"></a>User
+#### <a name="createUser"></a>Creating a user
 ```
 POST /user
 
@@ -159,7 +201,7 @@ Status codes:
 - 403: Forbidden, trying to access update other user
 - 404: Not found
 
-#### Update user password
+#### <a name="updateUserPassword"></a>Update user password
 ```
 PUT /user/:user_id/changePassword
 
@@ -182,7 +224,7 @@ Status codes:
 - 403: Trying to delete a different user (different `user_id`)
 - 500: Internal server error trying to delete user
 
-## Trip
+## <a name="trip"></a>Trip
 All calls described here require a user to be logged in.
 
 Status codes:
@@ -192,7 +234,7 @@ Status codes:
 - 403: Trying to read/update/delete a forbidden trip, for example trying to read from another user
 - 500: Internal server error
 
-#### Create a trip
+#### <a name="createTrip"></a>Create a trip
 ```
 POST /trip
 
@@ -221,7 +263,7 @@ $.ajax({
 });
 ```
 
-#### Get trip data
+#### <a name="getTripData"></a>Get trip data
 ```
 GET /trip/:trip_id
 
@@ -235,7 +277,7 @@ created_on
 index
 ```
 
-#### Get list of users for trip
+#### <a name="getListOfUsersForTrip"></a>Get list of users for trip
 ```
 GET /trip/:trip_id/users
 
@@ -247,7 +289,7 @@ avatar
 confirmed
 ```
 
-#### Add user to trip
+#### <a name="addUserToTrip"></a>Add user to trip
 ```
 PUT /trip/:trip_id/addUser
 
@@ -260,7 +302,7 @@ Optional:
 user.name
 ```
 
-#### Delete user from trip
+#### <a name="deleteUserFromTrip"></a>Delete user from trip
 ```
 DELETE /trip/:trip_id/removeUser
 
@@ -268,7 +310,7 @@ Required:
 user.user_id
 ```
 
-#### Get list of cities for trip
+#### <a name="getListOfCitiesForTrip"></a>Get list of cities for trip
 ```
 GET /trip/:trip_id/cities
 
@@ -285,7 +327,7 @@ created_on
 index
 ```
 
-#### Update trip
+#### <a name="updateTrip"></a>Update trip
 ``` 
 PUT /trip/:trip_id
 
@@ -305,7 +347,7 @@ created_on
 index
 ```
 
-#### Move trip (change index of trip, only for currently logged in user)
+#### <a name="moveTrip"></a>Move trip (change index of trip, only for currently logged in user)
 ```
 PUT /trip/:trip_id/move
 
@@ -320,7 +362,7 @@ Note: This API call will return 400 if:
 - fromIndex does not equal the index currently saved in the DB (for example when working with an old version in the frontend)
 
 
-#### Delete trip
+#### <a name="deleteTrip"></a>Delete trip
 ```
 DELETE /trip/:trip_id
 ```
