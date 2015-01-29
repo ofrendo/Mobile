@@ -25,7 +25,7 @@ This page lists the API calls that can be made to the backend.
 - [City](#city)
     - [Create city](#createCity)
     - [Get city](#getCity)
-    - [Get list of locations for city](#getListOfLocationForCity)
+    - [Get list of locations for city](#getListOfLocationsForCity)
     - [Change indexes of all locations for given city, to be used during optimization](#changeIndexes)
     - [Update city](#updateCity)
     - [Move city (change index of city)](#moveCity)
