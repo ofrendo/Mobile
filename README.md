@@ -3,6 +3,7 @@ Mobile Projekt 5. Semester: Backend repository
 
 ## Inhaltsverzeichnis
 - [Backend Infos](#backendInfos)
+    - [Dateistruktur](#dateistruktur)
     - [Vor erstem Laufen (lokal)](#vorErstemLaufen)
     - [Datenbank (PostgreSQL)](#datenbank)
     - [Lokal laufen lassen](#lokalLaufenLassen)
@@ -15,6 +16,28 @@ Mobile Projekt 5. Semester: Backend repository
     - [Git Guide](#gitGuide)
 
 # <a name="backendInfos"></a>Backend Infos
+## <a name="dateistruktur"></a>Dateistruktur
+root
+- docs
+    - API.md: Liste der verfügbaren Backend Calls
+    - Git.md: Git Guide
+- js
+    - crud
+        - crud.js: Modul zur einheitlichen Datenbankabfrage. Für POST/GET/PUT/DELETE Anfragen
+        - cityMgt.js: City API Calls
+        - locationMgt.js: Location API Calls
+        - tripMgt.js: Trip API Calls
+        - userMgt.js: User API Calls
+    - chat.js: [socket.io](http://socket.io/) für eine Chat Implementierung
+    - db.js: Modul für die Verbindung mit dem PostgreSQL Backend
+    - route.js: Verbindung der verschiedenen Routen (API Calls) mit JavaScript Funktionen
+    - server.js: Starten und Verwaltung des Servers
+    - sessionMgt.js: Verwaltung von Nutzersessions
+    - utils.js: Utility Methoden
+- test
+    - index.html: HTML Datei zum Testen der API Calls (benutzt [QUnit](http://qunitjs.com/) Framework)
+    - script.js: Unit tests, die ausgeführt werden
+
 ## <a name="vorErstemLaufen"></a>Vor erstem Laufen (lokal)
 Node Module installieren:
 ```
